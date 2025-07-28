@@ -79,21 +79,25 @@ h2 {
 /* Room Layout using CSS Grid */
 .room-layout {
     display: grid;
-    gap: 8px;
+    gap: 5px; /* Perkecil jarak antar grid */
     background-color: #f8f9fa;
     padding: 10px;
     border-radius: 8px;
+    /* Pastikan orientasi potret dengan membatasi lebar maksimum */
+    max-width: 600px; 
+    margin: auto; /* Pusatkan denah */
 }
 
 /* Base style for all grid items */
 .grid-item {
-    border-radius: 6px;
-    min-height: 50px;
-    font-size: 0.9em;
+    border-radius: 4px;
+    min-height: 45px;
+    font-size: 0.8em;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: #495057;
 }
 
 /* Room Styling */
@@ -111,8 +115,8 @@ h2 {
     z-index: 10;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
-.room-number { font-size: 1.1em; }
-.room-type { font-size: 0.75em; color: #555; margin-top: 2px; }
+.room-number { font-size: 1em; }
+.room-type { font-size: 0.7em; color: #555; margin-top: 2px; }
 
 /* Room Status Colors */
 .room.available { background-color: #d1fae5; border-color: #10b981; }
@@ -121,6 +125,16 @@ h2 {
 
 /* Non-Room Area Styling */
 .spacer { background-color: transparent; }
+.area-label {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+.dapur { background-color: #fff3bf; }
+.tangga { background-color: #d1d5db; }
+.teras { background-color: #e5e5e5; }
+.lift { background-color: #a5b4fc; }
+.sampah { background-color: #a3a3a3; }
+.parkir { background-color: #e0e7ff; }
 
 /* Modal/Pop-up Styling */
 .modal {
