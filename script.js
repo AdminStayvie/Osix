@@ -27,11 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'koridor1', type: 'area', id: 'koridor', x: 10, y: 105, w: 500, h: 20, label: 'Koridor' },
 
                 // BARIS 2: Blok B (atas) - Nomor kamar sesuai denah PDF
-                { key: 'B110', id: 'B110', x: 10, y: 130, w: 75, h: 90 },
-                { key: 'B109', id: 'B109', x: 90, y: 130, w: 75, h: 90 },
-                { key: 'B108_atas', id: 'B108', x: 170, y: 130, w: 75, h: 90 },
-                { key: 'B107_atas', id: 'B107', x: 250, y: 130, w: 75, h: 90 },
-                { key: 'B106_atas', id: 'B106', x: 330, y: 130, w: 75, h: 90 },
+                { key: 'B119', id: 'B119', x: 10, y: 130, w: 75, h: 90 },
+                { key: 'B118', id: 'B118', x: 90, y: 130, w: 75, h: 90 },
+                { key: 'B117_atas', id: 'B117', x: 170, y: 130, w: 75, h: 90 },
+                { key: 'B116_atas', id: 'B116', x: 250, y: 130, w: 75, h: 90 },
                 { key: 'dapur', type: 'area', id: 'dapur', x: 420, y: 130, w: 90, h: 70, label: 'Dapur' },
 
                 // BARIS 3: Blok A
@@ -45,10 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'tangga', type: 'area', id: 'tangga', x: 420, y: 250, w: 90, h: 120, label: 'Tangga' },
 
                 // BARIS 4: Blok B (tengah)
-                { key: 'B108_bawah', id: 'B108', x: 10, y: 345, w: 75, h: 90 },
-                { key: 'B107_bawah', id: 'B107', x: 90, y: 345, w: 75, h: 90 },
-                { key: 'B106_bawah', id: 'B106', x: 170, y: 345, w: 75, h: 90 },
-                { key: 'B105_atas', id: 'B105', x: 250, y: 345, w: 75, h: 90 },
+                { key: 'B109_bawah', id: 'B109', x: 10, y: 345, w: 75, h: 90 },
+                { key: 'B108_bawah', id: 'B108', x: 90, y: 345, w: 75, h: 90 },
+                { key: 'B107_bawah', id: 'B107', x: 170, y: 345, w: 75, h: 90 },
+                { key: 'B106_atas', id: 'B106', x: 250, y: 345, w: 75, h: 90 },
 
                 // BARIS 5: Blok B (bawah)
                 { key: 'B101', id: 'B101', x: 10, y: 440, w: 75, h: 90 },
