@@ -8,39 +8,81 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('room-modal');
     const closeButton = document.querySelector('.close-button');
 
-    // Denah layout berdasarkan file PDF. 'spacer' digunakan untuk area kosong.
+    // --- STRUKTUR LAYOUT BARU ---
+    // Mendefinisikan layout setiap lantai sebagai grid 2D.
+    // 'null' akan menjadi area parkir/koridor.
     const floorLayouts = {
-        '1': ['C120', 'C121', 'C122', 'C123', 'C125', 'spacer', 'B110', 'B109', 'B108', 'B107', 'B106', 'spacer', 'A110', 'A111', 'A112', 'A115', 'spacer', 'spacer', 'B101', 'B102', 'B103', 'B105', 'spacer', 'spacer'],
-        '2': ['C222', 'C223', 'C225', 'C226', 'C227', 'C228', 'B221', 'B220', 'B219', 'B218', 'B217', 'B216', 'A210', 'A211', 'A212', 'A215', 'spacer', 'spacer', 'B201', 'B202', 'B203', 'B205', 'B206', 'B209', 'B208', 'B207'],
-        '3': ['C319', 'C320', 'C321', 'C322', 'C323', 'C325', 'D318', 'D317', 'D316', 'D315', 'B312', 'spacer', 'B309', 'B310', 'B311', 'spacer', 'spacer', 'spacer', 'D301', 'D302', 'D303', 'D305', 'D306', 'D308', 'D307'],
-        '5': ['D512', 'D511', 'spacer', 'spacer', 'spacer', 'spacer', 'B508', 'B509', 'B510', 'spacer', 'spacer', 'spacer', 'D507', 'D506', 'D505', 'spacer', 'spacer', 'spacer', 'D501', 'D502', 'D503', 'spacer', 'spacer', 'spacer'],
+        '1': {
+            columns: 14,
+            grid: [
+                ['C120', 'C121', 'C122', 'C123', 'C125', null, null, null, null, 'sampah', 'dapur', 'dapur', 'dapur', 'dapur'],
+                ['B110', null, null, null, null, null, null, null, null, null, null, null, null, null],
+                ['B109', null, null, null, null, null, null, null, null, null, null, null, null, null],
+                ['B108', null, 'A110', 'A111', 'A112', 'A115', null, null, null, null, null, null, null, 'tangga'],
+                ['B107', null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
+                ['B106', null, null, null, null, null, null, null, null, null, null, null, null, null],
+                [null, null, 'B101', 'B102', 'B103', 'B105', null, null, null, null, null, null, null, null],
+                ['lift', 'lift', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras'],
+            ]
+        },
+        '2': {
+            columns: 14,
+            grid: [
+                ['C222', 'C223', 'C225', 'C226', 'C227', 'C228', null, null, null, null, 'dapur', 'dapur', 'dapur', 'dapur'],
+                ['B221', null, null, null, null, null, null, null, null, null, null, null, null, null],
+                ['B220', null, null, null, null, null, null, null, null, null, null, null, null, null],
+                ['B219', null, 'A210', 'A211', 'A212', 'A215', null, 'B216', null, null, null, null, null, 'tangga'],
+                ['B218', null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
+                ['B217', null, null, null, null, null, null, null, null, null, null, null, null, 'void'],
+                [null, null, 'B201', 'B202', 'B203', 'B205', 'B206', 'B209', 'B208', 'B207', null, null, null, null],
+                ['lift', 'lift', null, null, null, null, null, null, null, null, null, null, null, null],
+            ]
+        },
+        '3': {
+            columns: 14,
+            grid: [
+                ['C319', 'C320', 'C321', 'C322', 'C323', 'C325', null, null, null, null, null, null, null, null],
+                ['D318', null, null, null, null, null, null, null, 'D315', null, null, 'dapur', 'dapur', 'dapur'],
+                ['D317', null, null, null, null, null, null, null, 'D316', null, null, 'dapur', 'dapur', 'dapur'],
+                ['B309', null, 'B310', 'B311', null, 'B312', null, null, null, null, null, null, null, 'tangga'],
+                ['D308', null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
+                ['D307', null, null, null, null, null, null, null, null, null, null, null, null, 'void'],
+                ['D301', 'D302', 'D303', 'D305', 'D306', null, null, null, null, null, null, null, null, null],
+                ['lift', 'lift', null, null, null, null, null, null, null, null, null, null, null, null],
+            ]
+        },
+        '5': {
+            columns: 14,
+            grid: [
+                ['text-label:Jemuran', 'text-label:Jemuran', 'text-label:Jemuran', 'text-label:Jemuran', 'text-label:Jemuran', null, null, 'text-label:T.Setrika', 'text-label:T.Setrika', null, 'dapur', 'dapur', 'dapur', 'dapur'],
+                ['D512', 'D511', null, null, null, null, null, null, null, null, null, null, null, null],
+                ['B508', 'B509', 'B510', null, null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
+                ['D507', 'D506', 'D505', null, null, null, null, null, null, null, null, null, null, 'tangga'],
+                ['D501', 'D502', 'D503', null, null, null, null, null, null, null, null, null, null, null],
+                ['lift', 'lift', null, null, null, null, null, null, null, null, null, null, null, null],
+            ]
+        }
     };
 
-    // Fungsi untuk mengambil dan menampilkan data
     async function fetchData() {
         try {
             const response = await fetch(APPS_SCRIPT_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const roomDataArray = await response.json();
-            
-            // Ubah array menjadi objek untuk pencarian cepat
             const roomDataMap = new Map(roomDataArray.map(room => [room.no_kamar, room]));
-            
             renderDashboard(roomDataMap);
-
         } catch (error) {
             console.error('Error fetching data:', error);
             dashboardContainer.innerHTML = `<p style="text-align:center; color: red;">Gagal memuat data. Periksa konsol untuk detail error.</p>`;
         }
     }
 
-    // Fungsi untuk me-render seluruh dashboard
     function renderDashboard(roomDataMap) {
-        dashboardContainer.innerHTML = ''; // Hapus loader
+        dashboardContainer.innerHTML = ''; // Clear loader
 
         for (const floorNumber in floorLayouts) {
+            const floorData = floorLayouts[floorNumber];
             const floorDiv = document.createElement('div');
             floorDiv.className = 'floor';
             
@@ -51,42 +93,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const layoutDiv = document.createElement('div');
             layoutDiv.className = 'room-layout';
+            // Set grid columns dynamically
+            layoutDiv.style.gridTemplateColumns = `repeat(${floorData.columns}, 1fr)`;
 
-            // Render kamar sesuai urutan di layout
-            floorLayouts[floorNumber].forEach(roomNumber => {
-                if (roomNumber === 'spacer') {
-                    const spacerDiv = document.createElement('div');
-                    spacerDiv.className = 'room spacer';
-                    layoutDiv.appendChild(spacerDiv);
-                    return;
-                }
+            floorData.grid.flat().forEach(cellId => {
+                const cellDiv = document.createElement('div');
+                cellDiv.className = 'grid-item';
 
-                const roomData = roomDataMap.get(roomNumber);
-                if (!roomData) {
-                    console.warn(`Data untuk kamar ${roomNumber} tidak ditemukan.`);
-                    return;
-                }
-
-                const roomDiv = document.createElement('div');
-                roomDiv.className = 'room';
-                
-                // --- LOGIKA STATUS DIPERBARUI ---
-                // Tentukan status kamar dengan prioritas: Lunas -> Tersedia -> Booking
-                if (roomData.pelunasan === true) {
-                    roomDiv.classList.add('paid'); // Status Lunas (prioritas tertinggi)
-                } else if (!roomData.penghuni || roomData.penghuni.trim() === '-') {
-                    roomDiv.classList.add('available'); // Status Tersedia jika penghuni kosong atau "-"
+                if (cellId && cellId.startsWith('text-label:')) {
+                    cellDiv.classList.add('text-label');
+                    cellDiv.textContent = cellId.split(':')[1];
+                } else if (roomDataMap.has(cellId)) {
+                    // It's a room
+                    const roomData = roomDataMap.get(cellId);
+                    cellDiv.classList.add('room');
+                    
+                    if (roomData.pelunasan === true) cellDiv.classList.add('paid');
+                    else if (!roomData.penghuni || roomData.penghuni.trim() === '-') cellDiv.classList.add('available');
+                    else cellDiv.classList.add('booked');
+                    
+                    cellDiv.innerHTML = `<div class="room-number">${roomData.no_kamar}</div><div class="room-type">${roomData.tiper_kamar}</div>`;
+                    cellDiv.addEventListener('click', () => displayModal(roomData));
+                } else if (cellId) {
+                    // It's a special area like 'dapur', 'tangga', etc.
+                    cellDiv.classList.add(cellId);
                 } else {
-                    roomDiv.classList.add('booked'); // Status Booking jika ada nama penghuni
+                    // It's a null/spacer cell
+                    cellDiv.classList.add('spacer');
                 }
-                
-                roomDiv.innerHTML = `
-                    <div class="room-number">${roomData.no_kamar}</div>
-                    <div class="room-type">${roomData.tiper_kamar}</div>
-                `;
-                
-                roomDiv.addEventListener('click', () => displayModal(roomData));
-                layoutDiv.appendChild(roomDiv);
+                layoutDiv.appendChild(cellDiv);
             });
 
             floorDiv.appendChild(layoutDiv);
@@ -94,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Fungsi untuk menampilkan modal
     function displayModal(roomData) {
         document.getElementById('modal-room-number').textContent = `Detail Kamar ${roomData.no_kamar}`;
         document.getElementById('modal-room-type').textContent = roomData.tiper_kamar;
@@ -105,14 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'block';
     }
 
-    // Event listener untuk menutup modal
     closeButton.onclick = () => modal.style.display = 'none';
     window.onclick = (event) => {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
+        if (event.target == modal) modal.style.display = 'none';
     };
     
-    // Mulai proses pengambilan data
     fetchData();
 });
