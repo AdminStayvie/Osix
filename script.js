@@ -6,60 +6,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('room-modal');
     const closeButton = document.querySelector('.close-button');
 
-    // --- DEFINISI DENAH BARU YANG SANGAT AKURAT UNTUK CANVAS ---
+    // --- DEFINISI DENAH DIRAPIKAN UNTUK AKURASI TATA LETAK ---
     const floorLayouts = {
         '1': {
-            width: 520, // Lebar canvas
-            height: 750, // Tinggi canvas
+            width: 525, // Lebar canvas disesuaikan
+            height: 655, // Tinggi canvas disesuaikan
             elements: [
                 // 'key' unik untuk setiap elemen, 'id' adalah nomor kamar untuk data
                 // 'label' adalah teks yang akan ditampilkan
                 
                 // BARIS 1: Blok C
-                { key: 'C120', id: 'C120', x: 10, y: 10, w: 75, h: 90 },
-                { key: 'C121', id: 'C121', x: 90, y: 10, w: 75, h: 90 },
-                { key: 'C122', id: 'C122', x: 170, y: 10, w: 75, h: 90 },
-                { key: 'C123', id: 'C123', x: 250, y: 10, w: 75, h: 90 },
-                { key: 'C125', id: 'C125', x: 330, y: 10, w: 75, h: 90 },
-                { key: 'sampah', type: 'area', id: 'sampah', x: 420, y: 10, w: 90, h: 50, label: 'T.Sampah' },
+                { key: 'C120', id: 'C120', x: 10, y: 10, w: 80, h: 90 },
+                { key: 'C121', id: 'C121', x: 95, y: 10, w: 80, h: 90 },
+                { key: 'C122', id: 'C122', x: 180, y: 10, w: 80, h: 90 },
+                { key: 'C123', id: 'C123', x: 265, y: 10, w: 80, h: 90 },
+                { key: 'C125', id: 'C125', x: 350, y: 10, w: 80, h: 90 },
+                { key: 'sampah', type: 'area', id: 'sampah', x: 435, y: 10, w: 80, h: 50, label: 'T.Sampah' },
 
                 // KORIDOR 1
-                { key: 'koridor1', type: 'area', id: 'koridor', x: 10, y: 105, w: 320, h: 20, label: 'Koridor' },
+                { key: 'koridor1', type: 'area', id: 'koridor', x: 10, y: 105, w: 420, h: 20, label: '' },
 
-                // BARIS 2: Blok B (atas) - Nomor kamar sesuai denah PDF
-                { key: 'B119', id: 'B119', x: 10, y: 130, w: 75, h: 90 },
-                { key: 'B118', id: 'B118', x: 90, y: 130, w: 75, h: 90 },
-                { key: 'B117_atas', id: 'B117', x: 170, y: 130, w: 75, h: 90 },
-                { key: 'B116_atas', id: 'B116', x: 250, y: 130, w: 75, h: 90 },
-                { key: 'dapur', type: 'area', id: 'dapur', x: 330, y: 130, w: 60, h: 70, label: 'Dapur' },
+                // BARIS 2: Blok B (atas) - Nomor kamar sesuai permintaan
+                { key: 'B119', id: 'B119', x: 10, y: 130, w: 80, h: 90 },
+                { key: 'B118', id: 'B118', x: 95, y: 130, w: 80, h: 90 },
+                { key: 'B117', id: 'B117', x: 180, y: 130, w: 80, h: 90 },
+                { key: 'B116', id: 'B116', x: 265, y: 130, w: 80, h: 90 },
+                { key: 'dapur', type: 'area', id: 'dapur', x: 350, y: 130, w: 80, h: 90, label: 'Dapur' },
 
                 // BARIS 3: Blok A
-                { key: 'A110', id: 'A110', x: 10, y: 225, w: 75, h: 90 },
-                { key: 'A111', id: 'A111', x: 90, y: 225, w: 75, h: 90 },
-                { key: 'A112', id: 'A112', x: 170, y: 225, w: 75, h: 90 },
-                { key: 'A115', id: 'A115', x: 250, y: 225, w: 75, h: 90 },
+                { key: 'A110', id: 'A110', x: 10, y: 225, w: 80, h: 90 },
+                { key: 'A111', id: 'A111', x: 95, y: 225, w: 80, h: 90 },
+                { key: 'A112', id: 'A112', x: 180, y: 225, w: 80, h: 90 },
+                { key: 'A115', id: 'A115', x: 265, y: 225, w: 80, h: 90 },
 
                 // KORIDOR 2
-                { key: 'koridor2', type: 'area', id: 'koridor', x: 10, y: 320, w: 320, h: 20, label: 'Koridor' },
-                { key: 'tangga', type: 'area', id: 'tangga', x: 330, y: 345, w: 75, h: 90, label: 'Tangga' },
+                { key: 'koridor2', type: 'area', id: 'koridor', x: 10, y: 320, w: 335, h: 20, label: '' },
+                { key: 'tangga', type: 'area', id: 'tangga', x: 350, y: 225, w: 80, h: 115, label: 'Tangga' },
 
                 // BARIS 4: Blok B (tengah)
-                { key: 'B109_bawah', id: 'B109', x: 10, y: 345, w: 75, h: 90 },
-                { key: 'B108_bawah', id: 'B108', x: 90, y: 345, w: 75, h: 90 },
-                { key: 'B107_bawah', id: 'B107', x: 170, y: 345, w: 75, h: 90 },
-                { key: 'B106_atas', id: 'B106', x: 250, y: 345, w: 75, h: 90 },
+                { key: 'B109', id: 'B109', x: 10, y: 345, w: 80, h: 90 },
+                { key: 'B108', id: 'B108', x: 95, y: 345, w: 80, h: 90 },
+                { key: 'B107', id: 'B107', x: 180, y: 345, w: 80, h: 90 },
+                { key: 'B106', id: 'B106', x: 265, y: 345, w: 80, h: 90 },
 
                 // BARIS 5: Blok B (bawah)
-                { key: 'B101', id: 'B101', x: 10, y: 440, w: 75, h: 90 },
-                { key: 'B102', id: 'B102', x: 90, y: 440, w: 75, h: 90 },
-                { key: 'B103', id: 'B103', x: 170, y: 440, w: 75, h: 90 },
-                { key: 'B105_bawah', id: 'B105', x: 250, y: 440, w: 75, h: 90 },
-                { key: 'parkir1', type: 'area', id: 'parkir', x: 420, y: 375, w: 90, h: 200, label: 'Parkir' },
+                { key: 'B101', id: 'B101', x: 10, y: 440, w: 80, h: 90 },
+                { key: 'B102', id: 'B102', x: 95, y: 440, w: 80, h: 90 },
+                { key: 'B103', id: 'B103', x: 180, y: 440, w: 80, h: 90 },
+                { key: 'B105', id: 'B105', x: 265, y: 440, w: 80, h: 90 },
+                { key: 'parkir1', type: 'area', id: 'parkir', x: 435, y: 205, w: 80, h: 325, label: 'Parkir' },
 
                 // AREA BAWAH
-                { key: 'teras', type: 'area', id: 'teras', x: 10, y: 540, w: 320, h: 40, label: 'Teras' },
-                { key: 'lift', type: 'area', id: 'lift', x: 10, y: 585, w: 95, h: 60, label: 'Lift' },
-                { key: 'parkir2', type: 'area', id: 'parkir', x: 110, y: 585, w: 400, h: 60, label: 'Area Parkir Motor' },
+                { key: 'teras', type: 'area', id: 'teras', x: 10, y: 535, w: 420, h: 40, label: 'Teras' },
+                { key: 'lift', type: 'area', id: 'lift', x: 10, y: 580, w: 95, h: 65, label: 'Lift' },
+                { key: 'parkir2', type: 'area', id: 'parkir', x: 110, y: 580, w: 405, h: 65, label: 'Area Parkir Motor' },
             ]
         },
         // Denah lantai 2, 3, 5 akan menggunakan layout sederhana untuk sementara
@@ -142,7 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (el.type === 'area') {
                     ctx.fillStyle = colors[el.id] || colors.area;
                     ctx.fillRect(el.x, el.y, el.w, el.h);
-                    ctx.strokeRect(el.x, el.y, el.w, el.h);
+                    if (el.id !== 'koridor') { // Jangan beri border pada koridor
+                        ctx.strokeRect(el.x, el.y, el.w, el.h);
+                    }
                     drawText(ctx, el.label, el.x + el.w / 2, el.y + el.h / 2, 11, '#555');
                 } else {
                     const roomData = roomDataMap.get(el.id);
@@ -165,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function drawText(ctx, text, x, y, size = 12, color = '#333') {
+        if (!text) return; // Jangan gambar jika tidak ada teks
         ctx.fillStyle = color;
         ctx.font = `bold ${size}px 'Segoe UI'`;
         ctx.textAlign = 'center';
