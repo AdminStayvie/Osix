@@ -7,60 +7,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButton = document.querySelector('.close-button');
 
     // --- DEFINISI DENAH UNTUK CANVAS ---
-    // Setiap item memiliki: id, x, y, width, height, dan opsional 'type'
+    // Diperbarui dengan nomor kamar dari kotak oranye.
+    // 'key' adalah unik untuk setiap elemen, 'id' adalah nomor kamar untuk data.
     const floorLayouts = {
         '1': {
             width: 500, // Lebar canvas
             height: 800, // Tinggi canvas
             elements: [
                 // Kamar Blok C (atas)
-                { id: 'C120', x: 20, y: 20, w: 70, h: 100 },
-                { id: 'C121', x: 95, y: 20, w: 70, h: 100 },
-                { id: 'C122', x: 170, y: 20, w: 70, h: 100 },
-                { id: 'C123', x: 245, y: 20, w: 70, h: 100 },
-                { id: 'C125', x: 320, y: 20, w: 70, h: 100 },
-                { id: 'sampah', type: 'area', x: 400, y: 20, w: 80, h: 50, label: 'Sampah' },
+                { key: 'C120', id: 'C120', x: 20, y: 20, w: 70, h: 100 },
+                { key: 'C121', id: 'C121', x: 95, y: 20, w: 70, h: 100 },
+                { key: 'C122', id: 'C122', x: 170, y: 20, w: 70, h: 100 },
+                { key: 'C123', id: 'C123', x: 245, y: 20, w: 70, h: 100 },
+                { key: 'C125', id: 'C125', x: 320, y: 20, w: 70, h: 100 },
+                { key: 'sampah', type: 'area', id: 'sampah', x: 400, y: 20, w: 80, h: 50, label: 'Sampah' },
                 
                 // Kamar Blok B (atas)
-                { id: 'B110', x: 20, y: 150, w: 70, h: 100 },
-                { id: 'B109', x: 95, y: 150, w: 70, h: 100 },
-                { id: 'B108', x: 170, y: 150, w: 70, h: 100 },
-                { id: 'B107', x: 245, y: 150, w: 70, h: 100 },
-                { id: 'B106', x: 320, y: 150, w: 70, h: 100 },
-                { id: 'dapur', type: 'area', x: 400, y: 150, w: 80, h: 70, label: 'Dapur' },
+                { key: 'B110', id: 'B110', x: 20, y: 150, w: 70, h: 100 },
+                { key: 'B109_1', id: 'B109', x: 95, y: 150, w: 70, h: 100 },
+                { key: 'B108_1', id: 'B108', x: 170, y: 150, w: 70, h: 100 },
+                { key: 'B107_1', id: 'B107', x: 245, y: 150, w: 70, h: 100 },
+                { key: 'B106_1', id: 'B106', x: 320, y: 150, w: 70, h: 100 },
+                { key: 'dapur', type: 'area', id: 'dapur', x: 400, y: 150, w: 80, h: 70, label: 'Dapur' },
 
                 // Kamar Blok A
-                { id: 'A110', x: 20, y: 280, w: 70, h: 100 },
-                { id: 'A111', x: 95, y: 280, w: 70, h: 100 },
-                { id: 'A112', x: 170, y: 280, w: 70, h: 100 },
-                { id: 'A115', x: 245, y: 280, w: 70, h: 100 },
+                { key: 'A110', id: 'A110', x: 20, y: 280, w: 70, h: 100 },
+                { key: 'A111', id: 'A111', x: 95, y: 280, w: 70, h: 100 },
+                { key: 'A112', id: 'A112', x: 170, y: 280, w: 70, h: 100 },
+                { key: 'A115', id: 'A115', x: 245, y: 280, w: 70, h: 100 },
                 
-                { id: 'tangga', type: 'area', x: 400, y: 320, w: 80, h: 100, label: 'Tangga' },
+                { key: 'tangga', type: 'area', id: 'tangga', x: 400, y: 320, w: 80, h: 100, label: 'Tangga' },
 
-                // Kamar Blok B (bawah)
-                { id: 'B108', x: 20, y: 410, w: 70, h: 100 },
-                { id: 'B107', x: 95, y: 410, w: 70, h: 100 },
-                { id: 'B106', x: 170, y: 410, w: 70, h: 100 },
-                { id: 'B105', x: 245, y: 410, w: 70, h: 100 },
+                // Kamar Blok B (bawah) - Menggunakan nomor dari denah
+                { key: 'B108_2', id: 'B108', x: 20, y: 410, w: 70, h: 100 },
+                { key: 'B107_2', id: 'B107', x: 95, y: 410, w: 70, h: 100 },
+                { key: 'B106_2', id: 'B106', x: 170, y: 410, w: 70, h: 100 },
+                { key: 'B105_1', id: 'B105', x: 245, y: 410, w: 70, h: 100 },
                 
                 // Kamar Blok B (paling bawah)
-                { id: 'B101', x: 20, y: 540, w: 70, h: 100 },
-                { id: 'B102', x: 95, y: 540, w: 70, h: 100 },
-                { id: 'B103', x: 170, y: 540, w: 70, h: 100 },
-                { id: 'B105', x: 245, y: 540, w: 70, h: 100 }, // Duplikat B105 sesuai denah
+                { key: 'B101', id: 'B101', x: 20, y: 540, w: 70, h: 100 },
+                { key: 'B102', id: 'B102', x: 95, y: 540, w: 70, h: 100 },
+                { key: 'B103', id: 'B103', x: 170, y: 540, w: 70, h: 100 },
+                { key: 'B105_2', id: 'B105', x: 245, y: 540, w: 70, h: 100 },
                 
-                { id: 'parkir1', type: 'area', x: 400, y: 500, w: 80, h: 140, label: 'Parkir' },
+                { key: 'parkir1', type: 'area', id: 'parkir1', x: 400, y: 500, w: 80, h: 140, label: 'Parkir' },
 
                 // Area Bawah
-                { id: 'teras', type: 'area', x: 20, y: 670, w: 365, h: 40, label: 'Teras' },
-                { id: 'lift', type: 'area', x: 20, y: 715, w: 100, h: 60, label: 'Lift' },
-                { id: 'parkir2', type: 'area', x: 125, y: 715, w: 355, h: 60, label: 'Area Parkir Motor' },
+                { key: 'teras', type: 'area', id: 'teras', x: 20, y: 670, w: 365, h: 40, label: 'Teras' },
+                { key: 'lift', type: 'area', id: 'lift', x: 20, y: 715, w: 100, h: 60, label: 'Lift' },
+                { key: 'parkir2', type: 'area', id: 'parkir2', x: 125, y: 715, w: 355, h: 60, label: 'Area Parkir' },
             ]
         },
         // Definisikan denah lantai lain di sini dengan format yang sama
     };
 
-    // Warna untuk status dan area
     const colors = {
         available: '#d1fae5', booked: '#ffe4e6', paid: '#c7d2fe',
         area: '#e9ecef', border: '#a0a0a0', text: '#333',
@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderTabsAndCanvases() {
         Object.keys(floorLayouts).forEach((floorNumber, index) => {
-            // Buat Tab
             const tabButton = document.createElement('button');
             tabButton.className = 'tab-button';
             tabButton.textContent = `Lantai ${floorNumber}`;
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tabButton.addEventListener('click', () => switchTab(floorNumber));
             tabContainer.appendChild(tabButton);
 
-            // Buat Canvas
             const canvas = document.createElement('canvas');
             canvas.id = `canvas-floor-${floorNumber}`;
             canvas.className = 'floor-canvas';
@@ -123,13 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawAllFloors() {
         Object.keys(floorLayouts).forEach(floorNumber => {
             const canvas = document.getElementById(`canvas-floor-${floorNumber}`);
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
             const layout = floorLayouts[floorNumber];
 
-            // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw each element
             layout.elements.forEach(el => {
                 ctx.strokeStyle = colors.border;
                 ctx.lineWidth = 1;
@@ -161,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function drawText(ctx, text, x, y, size = 12) {
         ctx.fillStyle = colors.text;
-        ctx.font = `${size}px 'Segoe UI'`;
+        ctx.font = `bold ${size}px 'Segoe UI'`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(text, x, y);
@@ -170,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupCanvasClickHandlers() {
         Object.keys(floorLayouts).forEach(floorNumber => {
             const canvas = document.getElementById(`canvas-floor-${floorNumber}`);
+            if (!canvas) return;
             canvas.addEventListener('click', (event) => {
                 const rect = canvas.getBoundingClientRect();
                 const x = event.clientX - rect.left;
