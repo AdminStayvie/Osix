@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'B118', id: 'B118', x: 90, y: 130, w: 75, h: 90 },
                 { key: 'B117_atas', id: 'B117', x: 170, y: 130, w: 75, h: 90 },
                 { key: 'B116_atas', id: 'B116', x: 250, y: 130, w: 75, h: 90 },
-                { key: 'dapur', type: 'area', id: 'dapur', x: 420, y: 130, w: 90, h: 70, label: 'Dapur' },
+                { key: 'dapur', type: 'area', id: 'dapur', x: 330, y: 130, w: 60, h: 70, label: 'Dapur' },
 
                 // BARIS 3: Blok A
                 { key: 'A110', id: 'A110', x: 10, y: 225, w: 75, h: 90 },
