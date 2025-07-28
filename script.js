@@ -6,71 +6,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('room-modal');
     const closeButton = document.querySelector('.close-button');
 
-    // --- STRUKTUR LAYOUT BARU YANG AKURAT ---
+    // --- DEFINISI DENAH UNTUK CANVAS ---
+    // Setiap item memiliki: id, x, y, width, height, dan opsional 'type'
     const floorLayouts = {
         '1': {
-            columns: 7, // Jumlah kolom pada grid
-            grid: [
-                // Baris 1
-                ['C120', 'C121', 'C122', 'C123', 'C125', 'sampah', 'sampah'],
-                // Baris 2
-                [null, null, null, null, null, null, null],
-                // Baris 3
-                ['B110', 'B109', 'B108', 'B107', 'B106', 'dapur', 'dapur'],
-                // Baris 4
-                [null, null, null, null, null, null, null],
-                // Baris 5
-                ['A110', 'A111', 'A112', 'A115', null, 'tangga', 'tangga'],
-                 // Baris 6
-                [null, null, null, null, null, 'tangga', 'tangga'],
-                // Baris 7
-                ['B108', 'B107', 'B106', 'B105', null, null, null],
-                // Baris 8
-                [null, null, null, null, null, null, null],
-                // Baris 9
-                ['B101', 'B102', 'B103', 'B105', null, 'parkir', 'parkir'],
-                // Baris 10
-                ['teras', 'teras', 'teras', 'teras', null, 'parkir', 'parkir'],
-                 // Baris 11
-                ['lift', 'lift', 'parkir', 'parkir', 'parkir', 'parkir', 'parkir'],
+            width: 500, // Lebar canvas
+            height: 800, // Tinggi canvas
+            elements: [
+                // Kamar Blok C (atas)
+                { id: 'C120', x: 20, y: 20, w: 70, h: 100 },
+                { id: 'C121', x: 95, y: 20, w: 70, h: 100 },
+                { id: 'C122', x: 170, y: 20, w: 70, h: 100 },
+                { id: 'C123', x: 245, y: 20, w: 70, h: 100 },
+                { id: 'C125', x: 320, y: 20, w: 70, h: 100 },
+                { id: 'sampah', type: 'area', x: 400, y: 20, w: 80, h: 50, label: 'Sampah' },
+                
+                // Kamar Blok B (atas)
+                { id: 'B110', x: 20, y: 150, w: 70, h: 100 },
+                { id: 'B109', x: 95, y: 150, w: 70, h: 100 },
+                { id: 'B108', x: 170, y: 150, w: 70, h: 100 },
+                { id: 'B107', x: 245, y: 150, w: 70, h: 100 },
+                { id: 'B106', x: 320, y: 150, w: 70, h: 100 },
+                { id: 'dapur', type: 'area', x: 400, y: 150, w: 80, h: 70, label: 'Dapur' },
+
+                // Kamar Blok A
+                { id: 'A110', x: 20, y: 280, w: 70, h: 100 },
+                { id: 'A111', x: 95, y: 280, w: 70, h: 100 },
+                { id: 'A112', x: 170, y: 280, w: 70, h: 100 },
+                { id: 'A115', x: 245, y: 280, w: 70, h: 100 },
+                
+                { id: 'tangga', type: 'area', x: 400, y: 320, w: 80, h: 100, label: 'Tangga' },
+
+                // Kamar Blok B (bawah)
+                { id: 'B108', x: 20, y: 410, w: 70, h: 100 },
+                { id: 'B107', x: 95, y: 410, w: 70, h: 100 },
+                { id: 'B106', x: 170, y: 410, w: 70, h: 100 },
+                { id: 'B105', x: 245, y: 410, w: 70, h: 100 },
+                
+                // Kamar Blok B (paling bawah)
+                { id: 'B101', x: 20, y: 540, w: 70, h: 100 },
+                { id: 'B102', x: 95, y: 540, w: 70, h: 100 },
+                { id: 'B103', x: 170, y: 540, w: 70, h: 100 },
+                { id: 'B105', x: 245, y: 540, w: 70, h: 100 }, // Duplikat B105 sesuai denah
+                
+                { id: 'parkir1', type: 'area', x: 400, y: 500, w: 80, h: 140, label: 'Parkir' },
+
+                // Area Bawah
+                { id: 'teras', type: 'area', x: 20, y: 670, w: 365, h: 40, label: 'Teras' },
+                { id: 'lift', type: 'area', x: 20, y: 715, w: 100, h: 60, label: 'Lift' },
+                { id: 'parkir2', type: 'area', x: 125, y: 715, w: 355, h: 60, label: 'Area Parkir Motor' },
             ]
         },
-        '2': { // Denah lantai lain masih sederhana, bisa diperbarui nanti
-            columns: 6,
-            grid: [
-                ['C228', 'B221', 'A210', 'A212', 'B202', 'B201'], ['C227', 'B220', 'A211', null, 'B203', null],
-                ['C226', 'B219', 'A215', 'B216', 'B205', null], ['C225', 'B218', null, null, 'B206', 'B209'],
-                ['C223', 'B217', null, null, 'B207', null], ['C222', null, null, null, 'B208', null],
-            ]
-        },
-        '3': {
-            columns: 6,
-            grid: [
-                ['C325', 'D318', 'B309', 'B311', 'D307', 'D301'], ['C323', 'D317', 'B310', 'B312', 'D306', 'D302'],
-                ['C322', 'D316', null, null, 'D305', 'D303'], ['C321', 'D315', null, null, null, null],
-                ['C320', null, null, null, null, null], ['C319', null, null, null, null, null],
-            ]
-        },
-        '5': {
-            columns: 4,
-            grid: [
-                ['D512', 'B508', 'D507', 'D501'], ['D511', 'B509', 'D506', 'D502'], [null, 'B510', 'D505', 'D503'],
-            ]
-        }
+        // Definisikan denah lantai lain di sini dengan format yang sama
     };
+
+    // Warna untuk status dan area
+    const colors = {
+        available: '#d1fae5', booked: '#ffe4e6', paid: '#c7d2fe',
+        area: '#e9ecef', border: '#a0a0a0', text: '#333',
+        dapur: '#fff3bf', tangga: '#d1d5db', teras: '#e5e5e5', 
+        lift: '#a5b4fc', sampah: '#a3a3a3', parkir: '#e0e7ff',
+    };
+
+    let roomDataMap = new Map();
 
     async function fetchData() {
         try {
             const response = await fetch(APPS_SCRIPT_URL);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const roomDataArray = await response.json();
-            const roomDataMap = new Map(roomDataArray.map(room => [room.no_kamar, room]));
+            roomDataMap = new Map(roomDataArray.map(room => [room.no_kamar, room]));
             
             dashboardContainer.innerHTML = ''; 
             tabContainer.innerHTML = '';
 
-            renderTabs();
-            renderAllFloors(roomDataMap);
+            renderTabsAndCanvases();
+            drawAllFloors();
+            setupCanvasClickHandlers();
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -78,68 +90,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderTabs() {
+    function renderTabsAndCanvases() {
         Object.keys(floorLayouts).forEach((floorNumber, index) => {
+            // Buat Tab
             const tabButton = document.createElement('button');
             tabButton.className = 'tab-button';
             tabButton.textContent = `Lantai ${floorNumber}`;
             tabButton.dataset.floor = floorNumber;
-
             if (index === 0) tabButton.classList.add('active');
-
-            tabButton.addEventListener('click', () => {
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.floor').forEach(flr => flr.classList.remove('active'));
-                tabButton.classList.add('active');
-                document.getElementById(`floor-${floorNumber}`).classList.add('active');
-            });
+            tabButton.addEventListener('click', () => switchTab(floorNumber));
             tabContainer.appendChild(tabButton);
+
+            // Buat Canvas
+            const canvas = document.createElement('canvas');
+            canvas.id = `canvas-floor-${floorNumber}`;
+            canvas.className = 'floor-canvas';
+            const layout = floorLayouts[floorNumber];
+            canvas.width = layout.width;
+            canvas.height = layout.height;
+            if (index === 0) canvas.classList.add('active');
+            dashboardContainer.appendChild(canvas);
         });
     }
 
-    function renderAllFloors(roomDataMap) {
-        const areaTypes = ['dapur', 'tangga', 'teras', 'lift', 'sampah', 'parkir'];
+    function switchTab(floorNumber) {
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.floor-canvas').forEach(cnv => cnv.classList.remove('active'));
+        document.querySelector(`.tab-button[data-floor='${floorNumber}']`).classList.add('active');
+        document.getElementById(`canvas-floor-${floorNumber}`).classList.add('active');
+    }
 
-        Object.keys(floorLayouts).forEach((floorNumber, index) => {
-            const floorData = floorLayouts[floorNumber];
-            const floorDiv = document.createElement('div');
-            floorDiv.className = 'floor';
-            floorDiv.id = `floor-${floorNumber}`;
+    function drawAllFloors() {
+        Object.keys(floorLayouts).forEach(floorNumber => {
+            const canvas = document.getElementById(`canvas-floor-${floorNumber}`);
+            const ctx = canvas.getContext('2d');
+            const layout = floorLayouts[floorNumber];
 
-            if (index === 0) floorDiv.classList.add('active');
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const layoutDiv = document.createElement('div');
-            layoutDiv.className = 'room-layout';
-            layoutDiv.style.gridTemplateColumns = `repeat(${floorData.columns}, 1fr)`;
+            // Draw each element
+            layout.elements.forEach(el => {
+                ctx.strokeStyle = colors.border;
+                ctx.lineWidth = 1;
 
-            floorData.grid.flat().forEach(cellId => {
-                const cellDiv = document.createElement('div');
-                cellDiv.className = 'grid-item';
-
-                if (roomDataMap.has(cellId)) { // Jika ini adalah kamar
-                    const roomData = roomDataMap.get(cellId);
-                    cellDiv.classList.add('room');
+                if (el.type === 'area') {
+                    ctx.fillStyle = colors[el.id] || colors.area;
+                    ctx.fillRect(el.x, el.y, el.w, el.h);
+                    ctx.strokeRect(el.x, el.y, el.w, el.h);
+                    drawText(ctx, el.label, el.x + el.w / 2, el.y + el.h / 2);
+                } else {
+                    const roomData = roomDataMap.get(el.id);
+                    let status = 'available';
+                    if (roomData) {
+                        if (roomData.pelunasan === true) status = 'paid';
+                        else if (roomData.penghuni && roomData.penghuni.trim() !== '-') status = 'booked';
+                    }
                     
-                    if (roomData.pelunasan === true) cellDiv.classList.add('paid');
-                    else if (!roomData.penghuni || roomData.penghuni.trim() === '-') cellDiv.classList.add('available');
-                    else cellDiv.classList.add('booked');
+                    ctx.fillStyle = colors[status];
+                    ctx.fillRect(el.x, el.y, el.w, el.h);
+                    ctx.strokeRect(el.x, el.y, el.w, el.h);
                     
-                    cellDiv.innerHTML = `<div class="room-number">${roomData.no_kamar}</div><div class="room-type">${roomData.tiper_kamar}</div>`;
-                    cellDiv.addEventListener('click', () => displayModal(roomData));
-                } else if (areaTypes.includes(cellId)) { // Jika ini adalah area lain
-                    cellDiv.classList.add('area-label', cellId);
-                    cellDiv.textContent = cellId.charAt(0).toUpperCase() + cellId.slice(1);
-                } else { // Jika ini adalah ruang kosong
-                    cellDiv.classList.add('spacer');
+                    const roomType = roomData ? roomData.tiper_kamar : '';
+                    drawText(ctx, el.id, el.x + el.w / 2, el.y + el.h / 2 - 8);
+                    drawText(ctx, roomType, el.x + el.w / 2, el.y + el.h / 2 + 8, 10);
                 }
-                layoutDiv.appendChild(cellDiv);
             });
-
-            floorDiv.appendChild(layoutDiv);
-            dashboardContainer.appendChild(floorDiv);
         });
     }
     
+    function drawText(ctx, text, x, y, size = 12) {
+        ctx.fillStyle = colors.text;
+        ctx.font = `${size}px 'Segoe UI'`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, x, y);
+    }
+
+    function setupCanvasClickHandlers() {
+        Object.keys(floorLayouts).forEach(floorNumber => {
+            const canvas = document.getElementById(`canvas-floor-${floorNumber}`);
+            canvas.addEventListener('click', (event) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                const layout = floorLayouts[floorNumber];
+                for (const el of layout.elements) {
+                    if (el.type !== 'area' && x >= el.x && x <= el.x + el.w && y >= el.y && y <= el.y + el.h) {
+                        const roomData = roomDataMap.get(el.id);
+                        if (roomData) displayModal(roomData);
+                        break; 
+                    }
+                }
+            });
+        });
+    }
+
     function displayModal(roomData) {
         document.getElementById('modal-room-number').textContent = `Detail Kamar ${roomData.no_kamar}`;
         document.getElementById('modal-room-type').textContent = roomData.tiper_kamar;
