@@ -1,167 +1,159 @@
-/* General Styling */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5Eq284lYu9LDWPjHLlEFTC-8Mq2iTKGLvRPbi-XYGZBGPFQ9dIG3fUdm1iMlxign7/exec';
+    
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const tabContainer = document.getElementById('tab-container');
+    const modal = document.getElementById('room-modal');
+    const closeButton = document.querySelector('.close-button');
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-}
+    // --- STRUKTUR LAYOUT BARU YANG AKURAT ---
+    const floorLayouts = {
+        '1': {
+            columns: 7, // Jumlah kolom pada grid
+            grid: [
+                // Baris 1
+                ['C120', 'C121', 'C122', 'C123', 'C125', 'sampah', 'sampah'],
+                // Baris 2
+                [null, null, null, null, null, null, null],
+                // Baris 3
+                ['B110', 'B109', 'B108', 'B107', 'B106', 'dapur', 'dapur'],
+                // Baris 4
+                [null, null, null, null, null, null, null],
+                // Baris 5
+                ['A110', 'A111', 'A112', 'A115', null, 'tangga', 'tangga'],
+                 // Baris 6
+                [null, null, null, null, null, 'tangga', 'tangga'],
+                // Baris 7
+                ['B108', 'B107', 'B106', 'B105', null, null, null],
+                // Baris 8
+                [null, null, null, null, null, null, null],
+                // Baris 9
+                ['B101', 'B102', 'B103', 'B105', null, 'parkir', 'parkir'],
+                // Baris 10
+                ['teras', 'teras', 'teras', 'teras', null, 'parkir', 'parkir'],
+                 // Baris 11
+                ['lift', 'lift', 'parkir', 'parkir', 'parkir', 'parkir', 'parkir'],
+            ]
+        },
+        '2': { // Denah lantai lain masih sederhana, bisa diperbarui nanti
+            columns: 6,
+            grid: [
+                ['C228', 'B221', 'A210', 'A212', 'B202', 'B201'], ['C227', 'B220', 'A211', null, 'B203', null],
+                ['C226', 'B219', 'A215', 'B216', 'B205', null], ['C225', 'B218', null, null, 'B206', 'B209'],
+                ['C223', 'B217', null, null, 'B207', null], ['C222', null, null, null, 'B208', null],
+            ]
+        },
+        '3': {
+            columns: 6,
+            grid: [
+                ['C325', 'D318', 'B309', 'B311', 'D307', 'D301'], ['C323', 'D317', 'B310', 'B312', 'D306', 'D302'],
+                ['C322', 'D316', null, null, 'D305', 'D303'], ['C321', 'D315', null, null, null, null],
+                ['C320', null, null, null, null, null], ['C319', null, null, null, null, null],
+            ]
+        },
+        '5': {
+            columns: 4,
+            grid: [
+                ['D512', 'B508', 'D507', 'D501'], ['D511', 'B509', 'D506', 'D502'], [null, 'B510', 'D505', 'D503'],
+            ]
+        }
+    };
 
-h1, h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 5px;
-}
-h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
+    async function fetchData() {
+        try {
+            const response = await fetch(APPS_SCRIPT_URL);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const roomDataArray = await response.json();
+            const roomDataMap = new Map(roomDataArray.map(room => [room.no_kamar, room]));
+            
+            dashboardContainer.innerHTML = ''; 
+            tabContainer.innerHTML = '';
 
-/* Legend Styling */
-.legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-.legend-item { display: flex; align-items: center; gap: 8px; }
-.legend-color { width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
-.legend-available { background-color: #d1fae5; }
-.legend-booked { background-color: #ffe4e6; }
-.legend-paid { background-color: #c7d2fe; }
+            renderTabs();
+            renderAllFloors(roomDataMap);
 
-/* Tab Navigation Styling */
-.tab-container {
-    display: flex;
-    justify-content: center;
-    border-bottom: 2px solid #dee2e6;
-    margin-bottom: 20px;
-}
-.tab-button {
-    padding: 10px 20px;
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-    font-size: 1.1em;
-    font-weight: 500;
-    color: #495057;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s ease;
-}
-.tab-button:hover {
-    background-color: #f1f3f5;
-}
-.tab-button.active {
-    color: #4c6ef5;
-    border-bottom-color: #4c6ef5;
-}
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            dashboardContainer.innerHTML = `<p style="text-align:center; color: red;">Gagal memuat data. Periksa konsol untuk detail error.</p>`;
+        }
+    }
 
-/* Floor Styling */
-.floor {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    display: none; /* Sembunyikan semua lantai secara default */
-}
-.floor.active {
-    display: block; /* Tampilkan hanya lantai yang aktif */
-}
+    function renderTabs() {
+        Object.keys(floorLayouts).forEach((floorNumber, index) => {
+            const tabButton = document.createElement('button');
+            tabButton.className = 'tab-button';
+            tabButton.textContent = `Lantai ${floorNumber}`;
+            tabButton.dataset.floor = floorNumber;
 
-/* Room Layout using CSS Grid */
-.room-layout {
-    display: grid;
-    gap: 5px; /* Perkecil jarak antar grid */
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
-    /* Pastikan orientasi potret dengan membatasi lebar maksimum */
-    max-width: 600px; 
-    margin: auto; /* Pusatkan denah */
-}
+            if (index === 0) tabButton.classList.add('active');
 
-/* Base style for all grid items */
-.grid-item {
-    border-radius: 4px;
-    min-height: 45px;
-    font-size: 0.8em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #495057;
-}
+            tabButton.addEventListener('click', () => {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.floor').forEach(flr => flr.classList.remove('active'));
+                tabButton.classList.add('active');
+                document.getElementById(`floor-${floorNumber}`).classList.add('active');
+            });
+            tabContainer.appendChild(tabButton);
+        });
+    }
 
-/* Room Styling */
-.room {
-    padding: 5px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    font-weight: 600;
-    position: relative;
-    border: 1px solid transparent;
-}
-.room:hover {
-    transform: scale(1.05);
-    z-index: 10;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-.room-number { font-size: 1em; }
-.room-type { font-size: 0.7em; color: #555; margin-top: 2px; }
+    function renderAllFloors(roomDataMap) {
+        const areaTypes = ['dapur', 'tangga', 'teras', 'lift', 'sampah', 'parkir'];
 
-/* Room Status Colors */
-.room.available { background-color: #d1fae5; border-color: #10b981; }
-.room.booked { background-color: #ffe4e6; border-color: #f43f5e; }
-.room.paid { background-color: #c7d2fe; border-color: #6366f1; }
+        Object.keys(floorLayouts).forEach((floorNumber, index) => {
+            const floorData = floorLayouts[floorNumber];
+            const floorDiv = document.createElement('div');
+            floorDiv.className = 'floor';
+            floorDiv.id = `floor-${floorNumber}`;
 
-/* Non-Room Area Styling */
-.spacer { background-color: transparent; }
-.area-label {
-    background-color: #e9ecef;
-    font-weight: bold;
-}
-.dapur { background-color: #fff3bf; }
-.tangga { background-color: #d1d5db; }
-.teras { background-color: #e5e5e5; }
-.lift { background-color: #a5b4fc; }
-.sampah { background-color: #a3a3a3; }
-.parkir { background-color: #e0e7ff; }
+            if (index === 0) floorDiv.classList.add('active');
 
-/* Modal/Pop-up Styling */
-.modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-    overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s;
-}
-.modal-content {
-    background-color: #fff; margin: 10% auto; padding: 30px; border: 1px solid #888;
-    width: 90%; max-width: 500px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    animation: slideIn 0.4s;
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideIn { from { transform: translateY(-50px); } to { transform: translateY(0); } }
-.close-button {
-    color: #aaa; float: right; font-size: 28px; font-weight: bold; line-height: 1;
-}
-.close-button:hover, .close-button:focus {
-    color: black; text-decoration: none; cursor: pointer;
-}
-.modal-content h2 { text-align: left; }
-.modal-content p {
-    font-size: 1.1em; line-height: 1.6; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;
-}
+            const layoutDiv = document.createElement('div');
+            layoutDiv.className = 'room-layout';
+            layoutDiv.style.gridTemplateColumns = `repeat(${floorData.columns}, 1fr)`;
 
-/* Loader */
-.loader {
-    border: 8px solid #f3f3f3; border-radius: 50%; border-top: 8px solid #3498db;
-    width: 60px; height: 60px; animation: spin 2s linear infinite; margin: 50px auto;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            floorData.grid.flat().forEach(cellId => {
+                const cellDiv = document.createElement('div');
+                cellDiv.className = 'grid-item';
+
+                if (roomDataMap.has(cellId)) { // Jika ini adalah kamar
+                    const roomData = roomDataMap.get(cellId);
+                    cellDiv.classList.add('room');
+                    
+                    if (roomData.pelunasan === true) cellDiv.classList.add('paid');
+                    else if (!roomData.penghuni || roomData.penghuni.trim() === '-') cellDiv.classList.add('available');
+                    else cellDiv.classList.add('booked');
+                    
+                    cellDiv.innerHTML = `<div class="room-number">${roomData.no_kamar}</div><div class="room-type">${roomData.tiper_kamar}</div>`;
+                    cellDiv.addEventListener('click', () => displayModal(roomData));
+                } else if (areaTypes.includes(cellId)) { // Jika ini adalah area lain
+                    cellDiv.classList.add('area-label', cellId);
+                    cellDiv.textContent = cellId.charAt(0).toUpperCase() + cellId.slice(1);
+                } else { // Jika ini adalah ruang kosong
+                    cellDiv.classList.add('spacer');
+                }
+                layoutDiv.appendChild(cellDiv);
+            });
+
+            floorDiv.appendChild(layoutDiv);
+            dashboardContainer.appendChild(floorDiv);
+        });
+    }
+    
+    function displayModal(roomData) {
+        document.getElementById('modal-room-number').textContent = `Detail Kamar ${roomData.no_kamar}`;
+        document.getElementById('modal-room-type').textContent = roomData.tiper_kamar;
+        document.getElementById('modal-occupant').textContent = (roomData.penghuni && roomData.penghuni.trim() !== '-') ? roomData.penghuni : '-';
+        document.getElementById('modal-dp-status').textContent = roomData.dp === true ? 'Sudah DP' : 'Belum';
+        document.getElementById('modal-dp-date').textContent = roomData.tanggal_dp ? new Date(roomData.tanggal_dp).toLocaleDateString('id-ID') : '-';
+        document.getElementById('modal-payment-status').textContent = roomData.pelunasan === true ? 'Lunas' : 'Belum';
+        modal.style.display = 'block';
+    }
+
+    closeButton.onclick = () => modal.style.display = 'none';
+    window.onclick = (event) => {
+        if (event.target == modal) modal.style.display = 'none';
+    };
+    
+    fetchData();
+});
