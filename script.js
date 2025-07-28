@@ -7,46 +7,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButton = document.querySelector('.close-button');
 
     // --- STRUKTUR LAYOUT BARU YANG AKURAT ---
-    // Denah disederhanakan, hanya fokus pada kamar. `null` adalah ruang kosong.
     const floorLayouts = {
         '1': {
-            columns: 6,
+            columns: 7, // Jumlah kolom pada grid
             grid: [
-                ['C120', 'B110', 'A110', 'A112', 'B102', 'B101'],
-                ['C121', 'B109', 'A111', null,   'B103', null],
-                ['C122', 'B108', 'A115', null,   'B105', null],
-                ['C123', 'B107', null,   null,   null,   null],
-                ['C125', 'B106', null,   null,   null,   null],
+                // Baris 1
+                ['C120', 'C121', 'C122', 'C123', 'C125', 'sampah', 'sampah'],
+                // Baris 2
+                [null, null, null, null, null, null, null],
+                // Baris 3
+                ['B110', 'B109', 'B108', 'B107', 'B106', 'dapur', 'dapur'],
+                // Baris 4
+                [null, null, null, null, null, null, null],
+                // Baris 5
+                ['A110', 'A111', 'A112', 'A115', null, 'tangga', 'tangga'],
+                 // Baris 6
+                [null, null, null, null, null, 'tangga', 'tangga'],
+                // Baris 7
+                ['B108', 'B107', 'B106', 'B105', null, null, null],
+                // Baris 8
+                [null, null, null, null, null, null, null],
+                // Baris 9
+                ['B101', 'B102', 'B103', 'B105', null, 'parkir', 'parkir'],
+                // Baris 10
+                ['teras', 'teras', 'teras', 'teras', null, 'parkir', 'parkir'],
+                 // Baris 11
+                ['lift', 'lift', 'parkir', 'parkir', 'parkir', 'parkir', 'parkir'],
             ]
         },
-        '2': {
+        '2': { // Denah lantai lain masih sederhana, bisa diperbarui nanti
             columns: 6,
             grid: [
-                ['C228', 'B221', 'A210', 'A212', 'B202', 'B201'],
-                ['C227', 'B220', 'A211', null,   'B203', null],
-                ['C226', 'B219', 'A215', 'B216', 'B205', null],
-                ['C225', 'B218', null,   null,   'B206', 'B209'],
-                ['C223', 'B217', null,   null,   'B207', null],
-                ['C222', null,   null,   null,   'B208', null],
+                ['C228', 'B221', 'A210', 'A212', 'B202', 'B201'], ['C227', 'B220', 'A211', null, 'B203', null],
+                ['C226', 'B219', 'A215', 'B216', 'B205', null], ['C225', 'B218', null, null, 'B206', 'B209'],
+                ['C223', 'B217', null, null, 'B207', null], ['C222', null, null, null, 'B208', null],
             ]
         },
         '3': {
             columns: 6,
             grid: [
-                ['C325', 'D318', 'B309', 'B311', 'D307', 'D301'],
-                ['C323', 'D317', 'B310', 'B312', 'D306', 'D302'],
-                ['C322', 'D316', null,   null,   'D305', 'D303'],
-                ['C321', 'D315', null,   null,   null,   null],
-                ['C320', null,   null,   null,   null,   null],
-                ['C319', null,   null,   null,   null,   null],
+                ['C325', 'D318', 'B309', 'B311', 'D307', 'D301'], ['C323', 'D317', 'B310', 'B312', 'D306', 'D302'],
+                ['C322', 'D316', null, null, 'D305', 'D303'], ['C321', 'D315', null, null, null, null],
+                ['C320', null, null, null, null, null], ['C319', null, null, null, null, null],
             ]
         },
         '5': {
             columns: 4,
             grid: [
-                ['D512', 'B508', 'D507', 'D501'],
-                ['D511', 'B509', 'D506', 'D502'],
-                [null,   'B510', 'D505', 'D503'],
+                ['D512', 'B508', 'D507', 'D501'], ['D511', 'B509', 'D506', 'D502'], [null, 'B510', 'D505', 'D503'],
             ]
         }
     };
@@ -58,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const roomDataArray = await response.json();
             const roomDataMap = new Map(roomDataArray.map(room => [room.no_kamar, room]));
             
-            // Hapus loader dan mulai render
             dashboardContainer.innerHTML = ''; 
             tabContainer.innerHTML = '';
 
@@ -78,16 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tabButton.textContent = `Lantai ${floorNumber}`;
             tabButton.dataset.floor = floorNumber;
 
-            if (index === 0) {
-                tabButton.classList.add('active'); // Set tab pertama sebagai aktif
-            }
+            if (index === 0) tabButton.classList.add('active');
 
             tabButton.addEventListener('click', () => {
-                // Hapus aktif dari semua tab dan lantai
                 document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.floor').forEach(flr => flr.classList.remove('active'));
-
-                // Tambahkan aktif ke tab dan lantai yang diklik
                 tabButton.classList.add('active');
                 document.getElementById(`floor-${floorNumber}`).classList.add('active');
             });
@@ -96,15 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAllFloors(roomDataMap) {
+        const areaTypes = ['dapur', 'tangga', 'teras', 'lift', 'sampah', 'parkir'];
+
         Object.keys(floorLayouts).forEach((floorNumber, index) => {
             const floorData = floorLayouts[floorNumber];
             const floorDiv = document.createElement('div');
             floorDiv.className = 'floor';
             floorDiv.id = `floor-${floorNumber}`;
 
-            if (index === 0) {
-                floorDiv.classList.add('active'); // Tampilkan lantai pertama secara default
-            }
+            if (index === 0) floorDiv.classList.add('active');
 
             const layoutDiv = document.createElement('div');
             layoutDiv.className = 'room-layout';
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cellDiv = document.createElement('div');
                 cellDiv.className = 'grid-item';
 
-                if (roomDataMap.has(cellId)) {
+                if (roomDataMap.has(cellId)) { // Jika ini adalah kamar
                     const roomData = roomDataMap.get(cellId);
                     cellDiv.classList.add('room');
                     
@@ -124,7 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     cellDiv.innerHTML = `<div class="room-number">${roomData.no_kamar}</div><div class="room-type">${roomData.tiper_kamar}</div>`;
                     cellDiv.addEventListener('click', () => displayModal(roomData));
-                } else {
+                } else if (areaTypes.includes(cellId)) { // Jika ini adalah area lain
+                    cellDiv.classList.add('area-label', cellId);
+                    cellDiv.textContent = cellId.charAt(0).toUpperCase() + cellId.slice(1);
+                } else { // Jika ini adalah ruang kosong
                     cellDiv.classList.add('spacer');
                 }
                 layoutDiv.appendChild(cellDiv);
