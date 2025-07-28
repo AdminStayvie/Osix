@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'sampah', type: 'area', id: 'sampah', x: 420, y: 10, w: 90, h: 50, label: 'Sampah' },
 
                 // KORIDOR 1
-                { key: 'koridor1', type: 'area', id: 'koridor', x: 10, y: 105, w: 500, h: 20, label: 'Koridor' },
+                { key: 'koridor1', type: 'area', id: 'koridor', x: 10, y: 105, w: 300, h: 20, label: 'Koridor' },
 
                 // BARIS 2: Blok B (atas) - Nomor kamar sesuai denah PDF
                 { key: 'B119', id: 'B119', x: 10, y: 130, w: 75, h: 90 },
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'A115', id: 'A115', x: 250, y: 225, w: 75, h: 90 },
 
                 // KORIDOR 2
-                { key: 'koridor2', type: 'area', id: 'koridor', x: 10, y: 320, w: 400, h: 20, label: 'Koridor' },
+                { key: 'koridor2', type: 'area', id: 'koridor', x: 10, y: 320, w: 300, h: 20, label: 'Koridor' },
                 { key: 'tangga', type: 'area', id: 'tangga', x: 330, y: 345, w: 75, h: 90, label: 'Tangga' },
 
                 // BARIS 4: Blok B (tengah)
