@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
-    // !!! PENTING: GANTI URL DI BAWAH INI DENGAN URL WEB APP ANDA !!!
+    // URL Web App dari Google Apps Script Anda.
     // =========================================================================
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5Eq284lYu9LDWPjHLlEFTC-8Mq2iTKGLvRPbi-XYGZBGPFQ9dIG3fUdm1iMlxign7/exec';
     
@@ -18,11 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fungsi untuk mengambil dan menampilkan data
     async function fetchData() {
-        if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5Eq284lYu9LDWPjHLlEFTC-8Mq2iTKGLvRPbi-XYGZBGPFQ9dIG3fUdm1iMlxign7/exec') {
-            dashboardContainer.innerHTML = `<p style="text-align:center; color: red; font-weight: bold;">Harap masukkan URL Apps Script Anda di dalam file script.js.</p>`;
-            return;
-        }
-
         try {
             const response = await fetch(APPS_SCRIPT_URL);
             if (!response.ok) {
@@ -75,13 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const roomDiv = document.createElement('div');
                 roomDiv.className = 'room';
                 
-                // Tentukan status kamar
-                if (!roomData.penghuni) {
-                    roomDiv.classList.add('available');
-                } else if (roomData.pelunasan === true) {
-                    roomDiv.classList.add('paid');
+                // --- LOGIKA STATUS DIPERBARUI ---
+                // Tentukan status kamar dengan prioritas: Lunas -> Tersedia -> Booking
+                if (roomData.pelunasan === true) {
+                    roomDiv.classList.add('paid'); // Status Lunas (prioritas tertinggi)
+                } else if (!roomData.penghuni || roomData.penghuni.trim() === '-') {
+                    roomDiv.classList.add('available'); // Status Tersedia jika penghuni kosong atau "-"
                 } else {
-                    roomDiv.classList.add('booked');
+                    roomDiv.classList.add('booked'); // Status Booking jika ada nama penghuni
                 }
                 
                 roomDiv.innerHTML = `
@@ -102,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayModal(roomData) {
         document.getElementById('modal-room-number').textContent = `Detail Kamar ${roomData.no_kamar}`;
         document.getElementById('modal-room-type').textContent = roomData.tiper_kamar;
-        document.getElementById('modal-occupant').textContent = roomData.penghuni || '-';
+        document.getElementById('modal-occupant').textContent = (roomData.penghuni && roomData.penghuni.trim() !== '-') ? roomData.penghuni : '-';
         document.getElementById('modal-dp-status').textContent = roomData.dp === true ? 'Sudah DP' : 'Belum';
         document.getElementById('modal-dp-date').textContent = roomData.tanggal_dp ? new Date(roomData.tanggal_dp).toLocaleDateString('id-ID') : '-';
         document.getElementById('modal-payment-status').textContent = roomData.pelunasan === true ? 'Lunas' : 'Belum';
