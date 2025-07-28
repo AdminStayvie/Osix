@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Ketersediaan Kamar Bhaskara O'Six</title>
+    <!-- Menghubungkan ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <div class="container">
+        <h1>Dashboard Ketersediaan Kamar</h1>
+        <h2>Bhaskara O'Six</h2>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-color legend-available"></div><span>Tersedia</span></div>
+            <div class="legend-item"><div class="legend-color legend-booked"></div><span>Booking</span></div>
+            <div class="legend-item"><div class="legend-color legend-paid"></div><span>Lunas</span></div>
+        </div>
+
+        <div id="dashboard-container">
+            <div class="loader"></div>
+            <p style="text-align:center;">Memuat data kamar...</p>
+        </div>
+    </div>
+
+    <!-- Modal/Pop-up untuk detail kamar -->
+    <div id="room-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-room-number"></h2>
+            <p><strong>Tipe Kamar:</strong> <span id="modal-room-type"></span></p>
+            <p><strong>Penghuni:</strong> <span id="modal-occupant"></span></p>
+            <p><strong>Status DP:</strong> <span id="modal-dp-status"></span></p>
+            <p><strong>Tanggal DP:</strong> <span id="modal-dp-date"></span></p>
+            <p><strong>Status Pelunasan:</strong> <span id="modal-payment-status"></span></p>
+        </div>
+    </div>
+
+    <!-- Menghubungkan ke file JavaScript eksternal -->
+    <script src="script.js"></script>
+</body>
+</html>
