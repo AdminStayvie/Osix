@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'C122', id: 'C122', x: 170, y: 10, w: 75, h: 90 },
                 { key: 'C123', id: 'C123', x: 250, y: 10, w: 75, h: 90 },
                 { key: 'C125', id: 'C125', x: 330, y: 10, w: 75, h: 90 },
-                { key: 'sampah', type: 'area', id: 'sampah', x: 420, y: 10, w: 90, h: 50, label: 'Sampah' },
+                { key: 'sampah', type: 'area', id: 'sampah', x: 420, y: 10, w: 90, h: 50, label: 'T.Sampah' },
 
                 // KORIDOR 1
                 { key: 'koridor1', type: 'area', id: 'koridor', x: 10, y: 105, w: 300, h: 20, label: 'Koridor' },
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { key: 'B102', id: 'B102', x: 90, y: 440, w: 75, h: 90 },
                 { key: 'B103', id: 'B103', x: 170, y: 440, w: 75, h: 90 },
                 { key: 'B105_bawah', id: 'B105', x: 250, y: 440, w: 75, h: 90 },
-                { key: 'parkir1', type: 'area', id: 'parkir', x: 420, y: 375, w: 90, h: 155, label: 'Parkir' },
+                { key: 'parkir1', type: 'area', id: 'parkir', x: 420, y: 375, w: 90, h: 200, label: 'Parkir' },
 
                 // AREA BAWAH
                 { key: 'teras', type: 'area', id: 'teras', x: 10, y: 540, w: 400, h: 40, label: 'Teras' },
