@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // KORIDOR 2
                 { key: 'koridor2', type: 'area', id: 'koridor', x: 10, y: 320, w: 335, h: 20, label: '' },
-                { key: 'tangga', type: 'area', id: 'tangga', x: 350, y: 225, w: 80, h: 115, label: 'Tangga' },
+                { key: 'tangga', type: 'area', id: 'tangga', x: 350, y: 345, w: 80, h: 115, label: 'Tangga' },
 
                 // BARIS 4: Blok B (tengah)
                 { key: 'B109', id: 'B109', x: 10, y: 345, w: 80, h: 90 },
