@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: auto;
 }
 
@@ -28,57 +28,68 @@ h2 {
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
 }
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.legend-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.1);
-}
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-color { width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); }
 .legend-available { background-color: #d1fae5; }
 .legend-booked { background-color: #ffe4e6; }
 .legend-paid { background-color: #c7d2fe; }
+
+/* Tab Navigation Styling */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 20px;
+}
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #495057;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+.tab-button:hover {
+    background-color: #f1f3f5;
+}
+.tab-button.active {
+    color: #4c6ef5;
+    border-bottom-color: #4c6ef5;
+}
 
 /* Floor Styling */
 .floor {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
-    margin-bottom: 30px;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: none; /* Sembunyikan semua lantai secara default */
 }
-
-.floor-title {
-    font-size: 1.8em;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f0;
+.floor.active {
+    display: block; /* Tampilkan hanya lantai yang aktif */
 }
 
 /* Room Layout using CSS Grid */
 .room-layout {
     display: grid;
-    gap: 5px; /* Smaller gap for a tighter layout */
-    background-color: #e0e7ff; /* Light blue background for parking/corridor areas */
+    gap: 8px;
+    background-color: #f8f9fa;
     padding: 10px;
     border-radius: 8px;
 }
 
 /* Base style for all grid items */
 .grid-item {
-    border-radius: 4px;
-    min-height: 40px;
-    font-size: 0.8em;
+    border-radius: 6px;
+    min-height: 50px;
+    font-size: 0.9em;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -100,14 +111,8 @@ h2 {
     z-index: 10;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
-.room-number {
-    font-size: 1em;
-}
-.room-type {
-    font-size: 0.7em;
-    color: #555;
-    margin-top: 2px;
-}
+.room-number { font-size: 1.1em; }
+.room-type { font-size: 0.75em; color: #555; margin-top: 2px; }
 
 /* Room Status Colors */
 .room.available { background-color: #d1fae5; border-color: #10b981; }
@@ -116,19 +121,8 @@ h2 {
 
 /* Non-Room Area Styling */
 .spacer { background-color: transparent; }
-.text-label { 
-    background-color: transparent;
-    font-weight: bold;
-    color: #4a5568;
-}
-.dapur { background-color: #fef9c3; } /* Yellowish */
-.tangga { background-color: #d1d5db; } /* Gray */
-.void { background-color: #e5e7eb; }   /* Lighter Gray */
-.teras { background-color: #d4d4d8; }  /* Zinc */
-.lift { background-color: #a5b4fc; }   /* Indigo */
-.sampah { background-color: #a3a3a3; } /* Neutral */
 
-/* Modal/Pop-up Styling (No changes needed here) */
+/* Modal/Pop-up Styling */
 .modal {
     display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
     overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s;
