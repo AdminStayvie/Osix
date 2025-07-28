@@ -8,13 +8,19 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
 }
 
 h1, h2 {
     text-align: center;
     color: #2c3e50;
+    margin-bottom: 5px;
+}
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
 }
 
 /* Legend Styling */
@@ -62,99 +68,92 @@ h1, h2 {
 /* Room Layout using CSS Grid */
 .room-layout {
     display: grid;
-    /* Disesuaikan agar mirip dengan denah PDF */
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 15px;
+    gap: 5px; /* Smaller gap for a tighter layout */
+    background-color: #e0e7ff; /* Light blue background for parking/corridor areas */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Base style for all grid items */
+.grid-item {
+    border-radius: 4px;
+    min-height: 40px;
+    font-size: 0.8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Room Styling */
 .room {
-    border-radius: 8px;
-    padding: 15px;
+    padding: 5px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     font-weight: 600;
     position: relative;
-    overflow: hidden;
     border: 1px solid transparent;
 }
 .room:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 .room-number {
-    font-size: 1.2em;
+    font-size: 1em;
 }
 .room-type {
-    font-size: 0.8em;
+    font-size: 0.7em;
     color: #555;
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 /* Room Status Colors */
 .room.available { background-color: #d1fae5; border-color: #10b981; }
 .room.booked { background-color: #ffe4e6; border-color: #f43f5e; }
 .room.paid { background-color: #c7d2fe; border-color: #6366f1; }
-.room.spacer { background-color: transparent; border: none; cursor: default; }
-.room.spacer:hover { transform: none; box-shadow: none; }
 
-/* Modal/Pop-up Styling */
+/* Non-Room Area Styling */
+.spacer { background-color: transparent; }
+.text-label { 
+    background-color: transparent;
+    font-weight: bold;
+    color: #4a5568;
+}
+.dapur { background-color: #fef9c3; } /* Yellowish */
+.tangga { background-color: #d1d5db; } /* Gray */
+.void { background-color: #e5e7eb; }   /* Lighter Gray */
+.teras { background-color: #d4d4d8; }  /* Zinc */
+.lift { background-color: #a5b4fc; }   /* Indigo */
+.sampah { background-color: #a3a3a3; } /* Neutral */
+
+/* Modal/Pop-up Styling (No changes needed here) */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
-    animation: fadeIn 0.3s;
+    display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+    overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s;
 }
 .modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 30px;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    background-color: #fff; margin: 10% auto; padding: 30px; border: 1px solid #888;
+    width: 90%; max-width: 500px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     animation: slideIn 0.4s;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideIn { from { transform: translateY(-50px); } to { transform: translateY(0); } }
-
 .close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    line-height: 1;
+    color: #aaa; float: right; font-size: 28px; font-weight: bold; line-height: 1;
 }
 .close-button:hover, .close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    color: black; text-decoration: none; cursor: pointer;
 }
 .modal-content h2 { text-align: left; }
 .modal-content p {
-    font-size: 1.1em;
-    line-height: 1.6;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+    font-size: 1.1em; line-height: 1.6; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;
 }
 
 /* Loader */
 .loader {
-    border: 8px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 8px solid #3498db;
-    width: 60px;
-    height: 60px;
-    animation: spin 2s linear infinite;
-    margin: 50px auto;
+    border: 8px solid #f3f3f3; border-radius: 50%; border-top: 8px solid #3498db;
+    width: 60px; height: 60px; animation: spin 2s linear infinite; margin: 50px auto;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
