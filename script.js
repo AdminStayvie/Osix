@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fungsi untuk mengambil dan menampilkan data
     async function fetchData() {
-        if (APPS_SCRIPT_URL === 'URL_WEB_APP_ANDA_DISINI') {
+        if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5Eq284lYu9LDWPjHLlEFTC-8Mq2iTKGLvRPbi-XYGZBGPFQ9dIG3fUdm1iMlxign7/exec') {
             dashboardContainer.innerHTML = `<p style="text-align:center; color: red; font-weight: bold;">Harap masukkan URL Apps Script Anda di dalam file script.js.</p>`;
             return;
         }
