@@ -1,66 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // =========================================================================
-    // URL Web App dari Google Apps Script Anda.
-    // =========================================================================
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5Eq284lYu9LDWPjHLlEFTC-8Mq2iTKGLvRPbi-XYGZBGPFQ9dIG3fUdm1iMlxign7/exec';
     
     const dashboardContainer = document.getElementById('dashboard-container');
+    const tabContainer = document.getElementById('tab-container');
     const modal = document.getElementById('room-modal');
     const closeButton = document.querySelector('.close-button');
 
-    // --- STRUKTUR LAYOUT BARU ---
-    // Mendefinisikan layout setiap lantai sebagai grid 2D.
-    // 'null' akan menjadi area parkir/koridor.
+    // --- STRUKTUR LAYOUT BARU YANG AKURAT ---
+    // Denah disederhanakan, hanya fokus pada kamar. `null` adalah ruang kosong.
     const floorLayouts = {
         '1': {
-            columns: 14,
+            columns: 6,
             grid: [
-                ['C120', 'C121', 'C122', 'C123', 'C125', null, null, null, null, 'sampah', 'dapur', 'dapur', 'dapur', 'dapur'],
-                ['B110', null, null, null, null, null, null, null, null, null, null, null, null, null],
-                ['B109', null, null, null, null, null, null, null, null, null, null, null, null, null],
-                ['B108', null, 'A110', 'A111', 'A112', 'A115', null, null, null, null, null, null, null, 'tangga'],
-                ['B107', null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
-                ['B106', null, null, null, null, null, null, null, null, null, null, null, null, null],
-                [null, null, 'B101', 'B102', 'B103', 'B105', null, null, null, null, null, null, null, null],
-                ['lift', 'lift', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras', 'teras'],
+                ['C120', 'B110', 'A110', 'A112', 'B102', 'B101'],
+                ['C121', 'B109', 'A111', null,   'B103', null],
+                ['C122', 'B108', 'A115', null,   'B105', null],
+                ['C123', 'B107', null,   null,   null,   null],
+                ['C125', 'B106', null,   null,   null,   null],
             ]
         },
         '2': {
-            columns: 14,
+            columns: 6,
             grid: [
-                ['C222', 'C223', 'C225', 'C226', 'C227', 'C228', null, null, null, null, 'dapur', 'dapur', 'dapur', 'dapur'],
-                ['B221', null, null, null, null, null, null, null, null, null, null, null, null, null],
-                ['B220', null, null, null, null, null, null, null, null, null, null, null, null, null],
-                ['B219', null, 'A210', 'A211', 'A212', 'A215', null, 'B216', null, null, null, null, null, 'tangga'],
-                ['B218', null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
-                ['B217', null, null, null, null, null, null, null, null, null, null, null, null, 'void'],
-                [null, null, 'B201', 'B202', 'B203', 'B205', 'B206', 'B209', 'B208', 'B207', null, null, null, null],
-                ['lift', 'lift', null, null, null, null, null, null, null, null, null, null, null, null],
+                ['C228', 'B221', 'A210', 'A212', 'B202', 'B201'],
+                ['C227', 'B220', 'A211', null,   'B203', null],
+                ['C226', 'B219', 'A215', 'B216', 'B205', null],
+                ['C225', 'B218', null,   null,   'B206', 'B209'],
+                ['C223', 'B217', null,   null,   'B207', null],
+                ['C222', null,   null,   null,   'B208', null],
             ]
         },
         '3': {
-            columns: 14,
+            columns: 6,
             grid: [
-                ['C319', 'C320', 'C321', 'C322', 'C323', 'C325', null, null, null, null, null, null, null, null],
-                ['D318', null, null, null, null, null, null, null, 'D315', null, null, 'dapur', 'dapur', 'dapur'],
-                ['D317', null, null, null, null, null, null, null, 'D316', null, null, 'dapur', 'dapur', 'dapur'],
-                ['B309', null, 'B310', 'B311', null, 'B312', null, null, null, null, null, null, null, 'tangga'],
-                ['D308', null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
-                ['D307', null, null, null, null, null, null, null, null, null, null, null, null, 'void'],
-                ['D301', 'D302', 'D303', 'D305', 'D306', null, null, null, null, null, null, null, null, null],
-                ['lift', 'lift', null, null, null, null, null, null, null, null, null, null, null, null],
+                ['C325', 'D318', 'B309', 'B311', 'D307', 'D301'],
+                ['C323', 'D317', 'B310', 'B312', 'D306', 'D302'],
+                ['C322', 'D316', null,   null,   'D305', 'D303'],
+                ['C321', 'D315', null,   null,   null,   null],
+                ['C320', null,   null,   null,   null,   null],
+                ['C319', null,   null,   null,   null,   null],
             ]
         },
         '5': {
-            columns: 14,
+            columns: 4,
             grid: [
-                ['text-label:Jemuran', 'text-label:Jemuran', 'text-label:Jemuran', 'text-label:Jemuran', 'text-label:Jemuran', null, null, 'text-label:T.Setrika', 'text-label:T.Setrika', null, 'dapur', 'dapur', 'dapur', 'dapur'],
-                ['D512', 'D511', null, null, null, null, null, null, null, null, null, null, null, null],
-                ['B508', 'B509', 'B510', null, null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null, null, null, null, 'tangga'],
-                ['D507', 'D506', 'D505', null, null, null, null, null, null, null, null, null, null, 'tangga'],
-                ['D501', 'D502', 'D503', null, null, null, null, null, null, null, null, null, null, null],
-                ['lift', 'lift', null, null, null, null, null, null, null, null, null, null, null, null],
+                ['D512', 'B508', 'D507', 'D501'],
+                ['D511', 'B509', 'D506', 'D502'],
+                [null,   'B510', 'D505', 'D503'],
             ]
         }
     };
@@ -71,40 +57,64 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const roomDataArray = await response.json();
             const roomDataMap = new Map(roomDataArray.map(room => [room.no_kamar, room]));
-            renderDashboard(roomDataMap);
+            
+            // Hapus loader dan mulai render
+            dashboardContainer.innerHTML = ''; 
+            tabContainer.innerHTML = '';
+
+            renderTabs();
+            renderAllFloors(roomDataMap);
+
         } catch (error) {
             console.error('Error fetching data:', error);
             dashboardContainer.innerHTML = `<p style="text-align:center; color: red;">Gagal memuat data. Periksa konsol untuk detail error.</p>`;
         }
     }
 
-    function renderDashboard(roomDataMap) {
-        dashboardContainer.innerHTML = ''; // Clear loader
+    function renderTabs() {
+        Object.keys(floorLayouts).forEach((floorNumber, index) => {
+            const tabButton = document.createElement('button');
+            tabButton.className = 'tab-button';
+            tabButton.textContent = `Lantai ${floorNumber}`;
+            tabButton.dataset.floor = floorNumber;
 
-        for (const floorNumber in floorLayouts) {
+            if (index === 0) {
+                tabButton.classList.add('active'); // Set tab pertama sebagai aktif
+            }
+
+            tabButton.addEventListener('click', () => {
+                // Hapus aktif dari semua tab dan lantai
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.floor').forEach(flr => flr.classList.remove('active'));
+
+                // Tambahkan aktif ke tab dan lantai yang diklik
+                tabButton.classList.add('active');
+                document.getElementById(`floor-${floorNumber}`).classList.add('active');
+            });
+            tabContainer.appendChild(tabButton);
+        });
+    }
+
+    function renderAllFloors(roomDataMap) {
+        Object.keys(floorLayouts).forEach((floorNumber, index) => {
             const floorData = floorLayouts[floorNumber];
             const floorDiv = document.createElement('div');
             floorDiv.className = 'floor';
-            
-            const title = document.createElement('h3');
-            title.className = 'floor-title';
-            title.textContent = `Lantai ${floorNumber}`;
-            floorDiv.appendChild(title);
+            floorDiv.id = `floor-${floorNumber}`;
+
+            if (index === 0) {
+                floorDiv.classList.add('active'); // Tampilkan lantai pertama secara default
+            }
 
             const layoutDiv = document.createElement('div');
             layoutDiv.className = 'room-layout';
-            // Set grid columns dynamically
             layoutDiv.style.gridTemplateColumns = `repeat(${floorData.columns}, 1fr)`;
 
             floorData.grid.flat().forEach(cellId => {
                 const cellDiv = document.createElement('div');
                 cellDiv.className = 'grid-item';
 
-                if (cellId && cellId.startsWith('text-label:')) {
-                    cellDiv.classList.add('text-label');
-                    cellDiv.textContent = cellId.split(':')[1];
-                } else if (roomDataMap.has(cellId)) {
-                    // It's a room
+                if (roomDataMap.has(cellId)) {
                     const roomData = roomDataMap.get(cellId);
                     cellDiv.classList.add('room');
                     
@@ -114,11 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     cellDiv.innerHTML = `<div class="room-number">${roomData.no_kamar}</div><div class="room-type">${roomData.tiper_kamar}</div>`;
                     cellDiv.addEventListener('click', () => displayModal(roomData));
-                } else if (cellId) {
-                    // It's a special area like 'dapur', 'tangga', etc.
-                    cellDiv.classList.add(cellId);
                 } else {
-                    // It's a null/spacer cell
                     cellDiv.classList.add('spacer');
                 }
                 layoutDiv.appendChild(cellDiv);
@@ -126,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             floorDiv.appendChild(layoutDiv);
             dashboardContainer.appendChild(floorDiv);
-        }
+        });
     }
     
     function displayModal(roomData) {
