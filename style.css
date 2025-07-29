@@ -1421,7 +1421,7 @@ select.form-control {
 #floor1-grid {
     display: grid;
     min-width: 750px; /* Lebar minimum agar layout tidak rusak */
-    grid-template-columns: repeat(5, 1fr) 80px; /* 5 kolom untuk kamar, 1 kolom untuk parkir samping */
+    grid-template-columns: 1fr repeat(4, 1fr) 80px; /* 1 kolom lift, 4 kamar, 1 parkir samping */
     grid-template-rows: repeat(8, auto); /* 8 baris untuk semua elemen */
     gap: var(--space-12);
     /* Mendefinisikan area untuk setiap elemen */
@@ -1433,7 +1433,7 @@ select.form-control {
         "cor2 cor2 cor2 cor2 cor2 p-side"
         "b109 b108 b107 b106 stai p-side"
         "b101 b102 b103 b105 fill2 p-side"
-        "tera tera tera tera tera m-lift";
+        "m-lift tera tera tera tera p-side";
 }
 
 /* Penempatan setiap elemen ke dalam area grid */
@@ -1442,7 +1442,7 @@ select.form-control {
 #room-C122 { grid-area: c122; }
 #room-C123 { grid-area: c123; }
 #room-C125 { grid-area: c125; }
-#floor1-grid .corridor:nth-of-type(1) { grid-area: cor1; }
+#corridor-1 { grid-area: cor1; } /* Menggunakan ID */
 #room-B119 { grid-area: b119; }
 #room-B118 { grid-area: b118; }
 #room-B117 { grid-area: b117; }
@@ -1453,7 +1453,7 @@ select.form-control {
 #room-A112 { grid-area: a112; }
 #room-A115 { grid-area: a115; }
 #floor1-grid .grid-filler:nth-of-type(1) { grid-area: fill1; }
-#floor1-grid .corridor:nth-of-type(2) { grid-area: cor2; }
+#corridor-2 { grid-area: cor2; } /* Menggunakan ID */
 #room-B109 { grid-area: b109; }
 #room-B108 { grid-area: b108; }
 #room-B107 { grid-area: b107; }
