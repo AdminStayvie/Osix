@@ -64,7 +64,7 @@ class KostFloorPlanDashboard {
         // Mengelompokkan kamar berdasarkan lantainya
         const floorRooms = { '1': [], '2': [], '3': [], '5': [] };
 
-        this.roomData.forEach(room => {
+        this.filteredRooms.forEach(room => { // Menggunakan filteredRooms agar filter berfungsi
             const roomNumber = room['No Kamar'] || '';
             const floor = roomNumber.charAt(1); // Mengambil karakter kedua sebagai nomor lantai
             
@@ -147,7 +147,7 @@ class KostFloorPlanDashboard {
 
         this.organizeRoomsByFloor(); // Re-organize filtered rooms
         this.renderAllFloors(); // Re-render all floors with filtered data
-        this.updateStats();
+        this.updateStats(); // Update stats global berdasarkan data asli
     }
 
     renderAllFloors() {
@@ -168,9 +168,41 @@ class KostFloorPlanDashboard {
     }
 
     renderRegularFloor(floor) {
+        // --- LOGIKA BARU UNTUK LANTAI 1 ---
+        if (floor === '1') {
+            const rooms = this.floorRooms['1'] || [];
+
+            // Daftar semua ID kontainer kamar di Lantai 1 untuk dibersihkan
+            const roomContainersOnFloor1 = [
+                'C120', 'C121', 'C122', 'C123', 'C125',
+                'B119', 'B118', 'B117', 'B116',
+                'A110', 'A111', 'A112', 'A115',
+                'B109', 'B108', 'B107', 'B106',
+                'B101', 'B102', 'B103', 'B105'
+            ];
+            
+            // Bersihkan semua kontainer sebelum menempatkan kartu kamar baru
+            roomContainersOnFloor1.forEach(roomNum => {
+                const container = document.getElementById(`room-${roomNum}`);
+                if (container) container.innerHTML = '';
+            });
+
+            // Tempatkan setiap kartu kamar ke dalam kontainer yang sesuai
+            rooms.forEach(room => {
+                const roomNumber = room['No Kamar'];
+                const container = document.getElementById(`room-${roomNumber}`);
+                if (container) {
+                    const roomElement = this.createRoomElement(room);
+                    container.appendChild(roomElement);
+                }
+            });
+            this.updateFloorStats('1', rooms);
+            return; // Selesai untuk Lantai 1
+        }
+
+        // --- LOGIKA LAMA UNTUK LANTAI 2 & 3 (TETAP SAMA) ---
         const rooms = this.floorRooms[floor];
         const layouts = {
-            '1': { top: [17, 18, 19, 20, 21], middle: [14, 15, 16], lowerMiddle: [9, 10, 11, 12, 13], bottom: [1, 2, 3, 4, 5, 6, 7, 8] },
             '2': { top: [18, 19, 20, 21, 22, 23, 24], middle: [14, 15, 16, 17], lowerMiddle: [9, 10, 11, 12, 13], bottom: [1, 2, 3, 4, 5, 6, 7, 8] },
             '3': { top: [16, 17, 18, 19, 20, 21], middle: [12, 13, 14, 15], lowerMiddle: [8, 9, 10, 11], bottom: [1, 2, 3, 4, 5, 6, 7] }
         };
@@ -192,12 +224,12 @@ class KostFloorPlanDashboard {
     }
     
     renderFloor5() {
-        const rooms = this.floorRooms['5'];
+        const rooms = this.floorRooms['5'] || [];
         const leftWing = document.getElementById('floor5-left-wing');
         const rightWing = document.getElementById('floor5-right-wing');
         
-        leftWing.innerHTML = '';
-        rightWing.innerHTML = '';
+        if (leftWing) leftWing.innerHTML = '';
+        if (rightWing) rightWing.innerHTML = '';
 
         rooms.forEach(room => {
             const roomNum = parseInt((room['No Kamar'] || '0').slice(2), 10);
@@ -219,6 +251,10 @@ class KostFloorPlanDashboard {
         const roomDiv = document.createElement('div');
         roomDiv.className = `room-card ${statusClass}`;
         roomDiv.dataset.room = JSON.stringify(room);
+        
+        // Kartu kamar mengisi penuh kontainer grid-nya
+        roomDiv.style.width = '100%';
+        roomDiv.style.height = '100%';
         
         roomDiv.innerHTML = `
             <div class="room-number">${room['No Kamar'] || 'N/A'}</div>
