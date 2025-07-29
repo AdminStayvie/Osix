@@ -1407,7 +1407,7 @@ select.form-control {
   }
 }
 
-/* --- Tambahan untuk Layout Lantai 1 (Perbaikan) --- */
+/* --- Tambahan untuk Layout Lantai 1 (Perbaikan Final) --- */
 
 .floor1-layout-container {
     background-color: var(--color-surface);
@@ -1420,20 +1420,19 @@ select.form-control {
 
 #floor1-grid {
     display: grid;
-    min-width: 750px; /* Lebar minimum agar layout tidak rusak */
-    grid-template-columns: 1fr repeat(4, 1fr) 80px; /* 1 kolom lift, 4 kamar, 1 parkir samping */
+    min-width: 800px; /* Lebar minimum agar layout tidak rusak */
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 80px; /* 5 kolom kamar, 1 parkir samping */
     grid-template-rows: repeat(8, auto); /* 8 baris untuk semua elemen */
     gap: var(--space-12);
-    /* Mendefinisikan area untuk setiap elemen */
     grid-template-areas:
-        "c120 c121 c122 c123 c125 p-side"
-        "cor1 cor1 cor1 cor1 cor1 p-side"
-        "b119 b118 b117 b116 kitc p-side"
-        "a110 a111 a112 a115 fill1 p-side"
-        "cor2 cor2 cor2 cor2 cor2 p-side"
-        "b109 b108 b107 b106 stai p-side"
-        "b101 b102 b103 b105 fill2 p-side"
-        "m-lift tera tera tera tera p-side";
+        "c120   c121   c122   c123   c125   p-side"
+        "cor1   cor1   cor1   cor1   cor1   p-side"
+        "b119   b118   b117   b116   kitc   p-side"
+        "a110   a111   a112   a115   .      p-side" /* Titik untuk area kosong */
+        "cor2   cor2   cor2   cor2   cor2   p-side"
+        "b109   b108   b107   b106   stai   p-side"
+        "b101   b102   b103   b105   .      p-side" /* Titik untuk area kosong */
+        "m-lift tera   tera   tera   tera   p-side";
 }
 
 /* Penempatan setiap elemen ke dalam area grid */
@@ -1442,28 +1441,33 @@ select.form-control {
 #room-C122 { grid-area: c122; }
 #room-C123 { grid-area: c123; }
 #room-C125 { grid-area: c125; }
-#corridor-1 { grid-area: cor1; } /* Menggunakan ID */
+
+#corridor-1 { grid-area: cor1; }
+
 #room-B119 { grid-area: b119; }
 #room-B118 { grid-area: b118; }
 #room-B117 { grid-area: b117; }
 #room-B116 { grid-area: b116; }
 #floor1-grid .kitchen { grid-area: kitc; }
+
 #room-A110 { grid-area: a110; }
 #room-A111 { grid-area: a111; }
 #room-A112 { grid-area: a112; }
 #room-A115 { grid-area: a115; }
-#floor1-grid .grid-filler:nth-of-type(1) { grid-area: fill1; }
-#corridor-2 { grid-area: cor2; } /* Menggunakan ID */
+
+#corridor-2 { grid-area: cor2; }
+
 #room-B109 { grid-area: b109; }
 #room-B108 { grid-area: b108; }
 #room-B107 { grid-area: b107; }
 #room-B106 { grid-area: b106; }
 #floor1-grid .stairs { grid-area: stai; }
+
 #room-B101 { grid-area: b101; }
 #room-B102 { grid-area: b102; }
 #room-B103 { grid-area: b103; }
 #room-B105 { grid-area: b105; }
-#floor1-grid .grid-filler:nth-of-type(2) { grid-area: fill2; }
+
 #floor1-grid .terrace { grid-area: tera; }
 #floor1-grid .parking-side { grid-area: p-side; }
 #floor1-grid .motor-lift { grid-area: m-lift; }
@@ -1505,4 +1509,4 @@ select.form-control {
     padding: var(--space-12);
 }
 .grid-common-area.motor-lift { background-color: var(--color-bg-5); }
-.grid-filler { background: none; border: none; min-height: 0; }
+/* .grid-filler tidak lagi diperlukan karena kita menggunakan . (titik) di grid-template-areas */
