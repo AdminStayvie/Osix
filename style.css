@@ -1407,74 +1407,47 @@ select.form-control {
   }
 }
 
-/* --- Tambahan untuk Layout Lantai 1 (Perbaikan Final) --- */
-
+/* --- Layout Lantai 1 --- */
 .floor1-layout-container {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: var(--space-24);
     box-shadow: var(--shadow-sm);
-    overflow-x: auto; /* Tambahkan scroll untuk layar kecil */
+    overflow-x: auto;
 }
 
 #floor1-grid {
     display: grid;
-    min-width: 800px; /* Lebar minimum agar layout tidak rusak */
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 80px; /* 5 kolom kamar, 1 parkir samping */
-    grid-template-rows: repeat(8, auto); /* 8 baris untuk semua elemen */
+    min-width: 800px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 80px;
+    grid-template-rows: repeat(8, auto);
     gap: var(--space-12);
     grid-template-areas:
         "c120   c121   c122   c123   c125   p-side"
         "cor1   cor1   cor1   cor1   cor1   p-side"
         "b119   b118   b117   b116   kitc   p-side"
-        "a110   a111   a112   a115   .      p-side" /* Titik untuk area kosong */
+        "a110   a111   a112   a115   .      p-side"
         "cor2   cor2   cor2   cor2   cor2   p-side"
         "b109   b108   b107   b106   stai   p-side"
-        "b101   b102   b103   b105   .      p-side" /* Titik untuk area kosong */
+        "b101   b102   b103   b105   .      p-side"
         "m-lift tera   tera   tera   tera   p-side";
 }
 
-/* Penempatan setiap elemen ke dalam area grid */
-#room-C120 { grid-area: c120; }
-#room-C121 { grid-area: c121; }
-#room-C122 { grid-area: c122; }
-#room-C123 { grid-area: c123; }
-#room-C125 { grid-area: c125; }
-
+#room-C120 { grid-area: c120; } #room-C121 { grid-area: c121; } #room-C122 { grid-area: c122; } #room-C123 { grid-area: c123; } #room-C125 { grid-area: c125; }
 #corridor-1 { grid-area: cor1; }
-
-#room-B119 { grid-area: b119; }
-#room-B118 { grid-area: b118; }
-#room-B117 { grid-area: b117; }
-#room-B116 { grid-area: b116; }
+#room-B119 { grid-area: b119; } #room-B118 { grid-area: b118; } #room-B117 { grid-area: b117; } #room-B116 { grid-area: b116; }
 #floor1-grid .kitchen { grid-area: kitc; }
-
-#room-A110 { grid-area: a110; }
-#room-A111 { grid-area: a111; }
-#room-A112 { grid-area: a112; }
-#room-A115 { grid-area: a115; }
-
+#room-A110 { grid-area: a110; } #room-A111 { grid-area: a111; } #room-A112 { grid-area: a112; } #room-A115 { grid-area: a115; }
 #corridor-2 { grid-area: cor2; }
-
-#room-B109 { grid-area: b109; }
-#room-B108 { grid-area: b108; }
-#room-B107 { grid-area: b107; }
-#room-B106 { grid-area: b106; }
+#room-B109 { grid-area: b109; } #room-B108 { grid-area: b108; } #room-B107 { grid-area: b107; } #room-B106 { grid-area: b106; }
 #floor1-grid .stairs { grid-area: stai; }
-
-#room-B101 { grid-area: b101; }
-#room-B102 { grid-area: b102; }
-#room-B103 { grid-area: b103; }
-#room-B105 { grid-area: b105; }
-
+#room-B101 { grid-area: b101; } #room-B102 { grid-area: b102; } #room-B103 { grid-area: b103; } #room-B105 { grid-area: b105; }
 #floor1-grid .terrace { grid-area: tera; }
 #floor1-grid .parking-side { grid-area: p-side; }
 #floor1-grid .motor-lift { grid-area: m-lift; }
 
-
-/* Styling untuk elemen di dalam grid */
-#floor1-grid > div {
+#floor1-grid > div, #floor2-grid > div {
     border-radius: var(--radius-base);
     display: flex;
     align-items: center;
@@ -1488,9 +1461,9 @@ select.form-control {
 .grid-room {
     border: 1px dashed var(--color-border);
     background-color: rgba(var(--color-slate-500-rgb), 0.05);
-    min-height: 80px; /* Pastikan kartu kamar pas */
-    padding: 0; /* Biarkan kartu kamar yang mengatur padding */
-    align-items: stretch; /* Agar kartu kamar mengisi penuh */
+    min-height: 80px;
+    padding: 0;
+    align-items: stretch;
     justify-content: stretch;
 }
 
@@ -1503,10 +1476,50 @@ select.form-control {
 
 .grid-common-area.corridor { min-height: 40px; }
 .grid-common-area.terrace { min-height: 40px; }
-.grid-common-area.parking-side {
+.grid-common-area.parking-side, .grid-common-area.f2-parkir-atas {
     writing-mode: vertical-rl;
     text-orientation: mixed;
     padding: var(--space-12);
 }
-.grid-common-area.motor-lift { background-color: var(--color-bg-5); }
-/* .grid-filler tidak lagi diperlukan karena kita menggunakan . (titik) di grid-template-areas */
+.grid-common-area.motor-lift, .grid-common-area.f2-lift { background-color: var(--color-bg-5); }
+
+
+/* --- Layout Lantai 2 --- */
+.floor2-layout-container {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+}
+
+#floor2-grid {
+    display: grid;
+    min-width: 900px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: var(--space-12);
+    grid-template-areas:
+        "c222 c223 c225 c226 c227 c228"
+        "f2c1 f2c1 f2c1 f2c1 f2c1 f2c1"
+        "b221 b220 b219 b218 b217 ."
+        "a210 a211 a212 a215 b216 ."
+        "f2c2 f2c2 f2c2 f2c2 f2c2 f2c2"
+        "b209 b208 b207 b206 f2tg ."
+        "b201 b202 b203 b205 f2dp ."
+        "f2pa f2pa f2pa f2pa f2pa f2pa"
+        "f2li f2pb f2pb f2pb f2pb f2pb";
+}
+
+#room-C222 { grid-area: c222; } #room-C223 { grid-area: c223; } #room-C225 { grid-area: c225; } #room-C226 { grid-area: c226; } #room-C227 { grid-area: c227; } #room-C228 { grid-area: c228; }
+#f2-corridor-1 { grid-area: f2c1; }
+#room-B221 { grid-area: b221; } #room-B220 { grid-area: b220; } #room-B219 { grid-area: b219; } #room-B218 { grid-area: b218; } #room-B217 { grid-area: b217; }
+#room-A210 { grid-area: a210; } #room-A211 { grid-area: a211; } #room-A212 { grid-area: a212; } #room-A215 { grid-area: a215; } #room-B216 { grid-area: b216; }
+#f2-corridor-2 { grid-area: f2c2; }
+#room-B209 { grid-area: b209; } #room-B208 { grid-area: b208; } #room-B207 { grid-area: b207; } #room-B206 { grid-area: b206; }
+.f2-tangga { grid-area: f2tg; }
+#room-B201 { grid-area: b201; } #room-B202 { grid-area: b202; } #room-B203 { grid-area: b203; } #room-B205 { grid-area: b205; }
+.f2-dapur { grid-area: f2dp; }
+.f2-parkir-atas { grid-area: f2pa; }
+.f2-parkir-bawah { grid-area: f2pb; }
+.f2-lift { grid-area: f2li; }
