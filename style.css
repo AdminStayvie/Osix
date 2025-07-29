@@ -1476,12 +1476,12 @@ select.form-control {
 
 .grid-common-area.corridor { min-height: 40px; }
 .grid-common-area.terrace { min-height: 40px; }
-.grid-common-area.parking-side, .grid-common-area.f2-parkir-atas {
+.grid-common-area.parking-side, .grid-common-area.f2-parkir-atas, .grid-common-area.f3-parkir-kanan {
     writing-mode: vertical-rl;
     text-orientation: mixed;
     padding: var(--space-12);
 }
-.grid-common-area.motor-lift, .grid-common-area.f2-lift { background-color: var(--color-bg-5); }
+.grid-common-area.motor-lift, .grid-common-area.f2-lift, .grid-common-area.f3-lift { background-color: var(--color-bg-5); }
 
 /* --- Layout Lantai 2 --- */
 #floor2-grid {
@@ -1514,22 +1514,23 @@ select.form-control {
 .f2-parkir-bawah { grid-area: f2pb; }
 .f2-lift { grid-area: f2li; }
 
-/* --- Layout Lantai 3 --- */
+/* --- Layout Lantai 3 (Diperbarui) --- */
 #floor3-grid {
     display: grid;
-    min-width: 800px;
-    grid-template-columns: repeat(6, 1fr) 80px;
+    min-width: 900px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 80px;
     gap: var(--space-12);
     grid-template-areas:
-        "c319 c320 c321 c322 c323 c325 f3li"
-        "f3c1 f3c1 f3c1 f3c1 f3c1 f3c1 f3li"
-        "d318 d317 . d316 d315 . f3li"
-        "f3c2 f3c2 f3c2 f3c2 f3c2 f3c2 f3li"
-        "b309 b310 b311 . b312 . f3li"
-        "f3c3 f3c3 f3c3 f3c3 f3c3 f3c3 f3li"
-        "d308 d307 . d306 f3tg f3tg f3li"
-        "f3c4 f3c4 f3c4 f3c4 f3dp f3dp f3li"
-        "d301 d302 . d303 d305 . f3li";
+        "c319 c320 c321 c322 c323 c325 f3pk-r"
+        "f3c1 f3c1 f3c1 f3c1 f3c1 f3c1 f3pk-r"
+        "d318 d317 . d316 d315 . f3pk-r"
+        "f3c2 f3c2 f3c2 f3c2 f3c2 f3c2 f3pk-r"
+        "b309 b310 b311 . b312 . f3pk-r"
+        "f3c3 f3c3 f3c3 f3c3 f3c3 f3c3 f3pk-r"
+        "d308 d307 . d306 f3tg f3tg f3pk-r"
+        "f3c4 f3c4 f3c4 f3c4 f3dp f3dp f3pk-r"
+        "d301 d302 . d303 d305 . f3pk-r"
+        "f3li f3pk-b f3pk-b f3pk-b f3pk-b f3pk-b f3pk-r";
 }
 
 #room-C319 { grid-area: c319; } #room-C320 { grid-area: c320; } #room-C321 { grid-area: c321; } #room-C322 { grid-area: c322; } #room-C323 { grid-area: c323; } #room-C325 { grid-area: c325; }
@@ -1543,4 +1544,6 @@ select.form-control {
 #f3-corridor-4 { grid-area: f3c4; }
 .f3-dapur { grid-area: f3dp; }
 #room-D301 { grid-area: d301; } #room-D302 { grid-area: d302; } #room-D303 { grid-area: d303; } #room-D305 { grid-area: d305; }
-.f3-lift { grid-area: f3li; writing-mode: vertical-rl; text-orientation: mixed; }
+.f3-lift { grid-area: f3li; }
+.f3-parkir-kanan { grid-area: f3pk-r; writing-mode: vertical-rl; text-orientation: mixed; }
+.f3-parkir-bawah { grid-area: f3pk-b; }
