@@ -86,7 +86,8 @@
 
         <!-- Floor Plans Container -->
         <div id="floorPlansContainer" class="floor-plans-container">
-            <!-- Floor 1 (Layout Baru) -->
+            
+            <!-- Floor 1 (Layout Diperbaiki) -->
             <div class="floor-plan active" data-floor="1">
                 <div class="floor-header">
                     <h2>Lantai 1</h2>
@@ -97,51 +98,35 @@
                 </div>
                 <div class="floor1-layout-container">
                     <div id="floor1-grid">
-                        <!-- Baris 1: Kamar C -->
+                        <!-- Kamar (akan diisi oleh JavaScript) -->
                         <div id="room-C120" class="grid-room"></div>
                         <div id="room-C121" class="grid-room"></div>
                         <div id="room-C122" class="grid-room"></div>
                         <div id="room-C123" class="grid-room"></div>
                         <div id="room-C125" class="grid-room"></div>
-
-                        <!-- Koridor 1 -->
-                        <div class="grid-common-area corridor">KORIDOR</div>
-
-                        <!-- Baris 2: Kamar B atas & Dapur -->
                         <div id="room-B119" class="grid-room"></div>
                         <div id="room-B118" class="grid-room"></div>
                         <div id="room-B117" class="grid-room"></div>
                         <div id="room-B116" class="grid-room"></div>
-                        <div class="grid-common-area kitchen">Dapur</div>
-                        
-                        <!-- Baris 3: Kamar A -->
                         <div id="room-A110" class="grid-room"></div>
                         <div id="room-A111" class="grid-room"></div>
                         <div id="room-A112" class="grid-room"></div>
                         <div id="room-A115" class="grid-room"></div>
-                        <div class="grid-filler"></div> <!-- Pengisi kosong -->
-
-                        <!-- Koridor 2 -->
-                        <div class="grid-common-area corridor">KORIDOR</div>
-
-                        <!-- Baris 4: Kamar B tengah & Tangga -->
                         <div id="room-B109" class="grid-room"></div>
                         <div id="room-B108" class="grid-room"></div>
                         <div id="room-B107" class="grid-room"></div>
                         <div id="room-B106" class="grid-room"></div>
-                        <div class="grid-common-area stairs">Tangga</div>
-                        
-                        <!-- Baris 5: Kamar B bawah -->
                         <div id="room-B101" class="grid-room"></div>
                         <div id="room-B102" class="grid-room"></div>
                         <div id="room-B103" class="grid-room"></div>
                         <div id="room-B105" class="grid-room"></div>
-                        <div class="grid-filler"></div> <!-- Pengisi kosong -->
-
-                        <!-- Teras & Area Parkir -->
+                        
+                        <!-- Area Umum -->
+                        <div id="corridor-1" class="grid-common-area corridor">KORIDOR</div>
+                        <div class="grid-common-area kitchen">Dapur</div>
+                        <div id="corridor-2" class="grid-common-area corridor">KORIDOR</div>
+                        <div class="grid-common-area stairs">Tangga</div>
                         <div class="grid-common-area terrace">TERAS & AREA PARKIR</div>
-
-                        <!-- Area Parkir Samping & Lift -->
                         <div class="grid-common-area parking-side">A<br>R<br>E<br>A<br><br>P<br>A<br>R<br>K<br>I<br>R</div>
                         <div class="grid-common-area motor-lift">Lift Motor</div>
                     </div>
@@ -158,31 +143,14 @@
                     </div>
                 </div>
                 <div class="floor-layout">
-                    <!-- Top Section: Rooms 18-24 -->
-                    <div class="room-section top-section">
-                        <div class="rooms-row" id="floor2-top-row"></div>
-                    </div>
-                    
-                    <!-- Middle Section: Rooms 14-17 -->
-                    <div class="room-section middle-section">
-                        <div class="rooms-row" id="floor2-middle-row"></div>
-                    </div>
-                    
-                    <!-- Common Areas -->
+                    <div class="room-section top-section"><div class="rooms-row" id="floor2-top-row"></div></div>
+                    <div class="room-section middle-section"><div class="rooms-row" id="floor2-middle-row"></div></div>
                     <div class="common-areas">
                         <div class="common-area">Lubang</div>
                         <div class="common-area">Tangga</div>
                     </div>
-                    
-                    <!-- Lower Middle Section: Rooms 09-13 -->
-                    <div class="room-section lower-middle-section">
-                        <div class="rooms-row" id="floor2-lower-middle-row"></div>
-                    </div>
-                    
-                    <!-- Bottom Section: Rooms 01-08 -->
-                    <div class="room-section bottom-section">
-                        <div class="rooms-row" id="floor2-bottom-row"></div>
-                    </div>
+                    <div class="room-section lower-middle-section"><div class="rooms-row" id="floor2-lower-middle-row"></div></div>
+                    <div class="room-section bottom-section"><div class="rooms-row" id="floor2-bottom-row"></div></div>
                 </div>
             </div>
 
@@ -196,30 +164,11 @@
                     </div>
                 </div>
                 <div class="floor-layout">
-                    <!-- Top Section: Rooms 16-21 -->
-                    <div class="room-section top-section">
-                        <div class="rooms-row" id="floor3-top-row"></div>
-                    </div>
-                    
-                    <!-- Middle Section: Rooms 12-15 -->
-                    <div class="room-section middle-section">
-                        <div class="rooms-row" id="floor3-middle-row"></div>
-                    </div>
-                    
-                    <!-- Common Areas -->
-                    <div class="common-areas">
-                        <div class="common-area">Tangga</div>
-                    </div>
-                    
-                    <!-- Lower Middle Section: Rooms 08-11 -->
-                    <div class="room-section lower-middle-section">
-                        <div class="rooms-row" id="floor3-lower-middle-row"></div>
-                    </div>
-                    
-                    <!-- Bottom Section: Rooms 01-07 -->
-                    <div class="room-section bottom-section">
-                        <div class="rooms-row" id="floor3-bottom-row"></div>
-                    </div>
+                    <div class="room-section top-section"><div class="rooms-row" id="floor3-top-row"></div></div>
+                    <div class="room-section middle-section"><div class="rooms-row" id="floor3-middle-row"></div></div>
+                    <div class="common-areas"><div class="common-area">Tangga</div></div>
+                    <div class="room-section lower-middle-section"><div class="rooms-row" id="floor3-lower-middle-row"></div></div>
+                    <div class="room-section bottom-section"><div class="rooms-row" id="floor3-bottom-row"></div></div>
                 </div>
             </div>
 
@@ -233,18 +182,13 @@
                     </div>
                 </div>
                 <div class="floor-layout floor5-layout">
-                    <!-- Left Wing -->
                     <div class="room-wing left-wing" id="floor5-left-wing"></div>
-                    
-                    <!-- Central Areas -->
                     <div class="central-areas">
                         <div class="common-area large">Jemuran/Laundry</div>
                         <div class="common-area large">T.Serbaguna</div>
                         <div class="common-area">Gudang</div>
                         <div class="common-area">Ruang Makan Bersama</div>
                     </div>
-                    
-                    <!-- Right Wing -->
                     <div class="room-wing right-wing" id="floor5-right-wing"></div>
                 </div>
             </div>
@@ -275,34 +219,13 @@
             </div>
             <div class="modal-body">
                 <div class="room-detail-grid">
-                    <div class="detail-item">
-                        <label>Nomor Kamar:</label>
-                        <span id="modalRoomNumber">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Tipe Kamar:</label>
-                        <span id="modalRoomType">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Status:</label>
-                        <span id="modalStatus" class="status">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Penghuni:</label>
-                        <span id="modalOccupant">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Status DP:</label>
-                        <span id="modalDP">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Tanggal DP:</label>
-                        <span id="modalDPDate">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <label>Status Pelunasan:</label>
-                        <span id="modalPayment">-</span>
-                    </div>
+                    <div class="detail-item"><label>Nomor Kamar:</label><span id="modalRoomNumber">-</span></div>
+                    <div class="detail-item"><label>Tipe Kamar:</label><span id="modalRoomType">-</span></div>
+                    <div class="detail-item"><label>Status:</label><span id="modalStatus" class="status">-</span></div>
+                    <div class="detail-item"><label>Penghuni:</label><span id="modalOccupant">-</span></div>
+                    <div class="detail-item"><label>Status DP:</label><span id="modalDP">-</span></div>
+                    <div class="detail-item"><label>Tanggal DP:</label><span id="modalDPDate">-</span></div>
+                    <div class="detail-item"><label>Status Pelunasan:</label><span id="modalPayment">-</span></div>
                 </div>
             </div>
             <div class="modal-footer">
