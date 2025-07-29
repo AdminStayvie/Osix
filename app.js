@@ -150,21 +150,24 @@ class KostFloorPlanDashboard {
             return;
         }
 
-        // Fallback for other floors (e.g., Floor 3)
-        const rooms = this.floorRooms[floor] || [];
-        const layouts = {
-            '3': { top: [16, 17, 18, 19, 20, 21], middle: [12, 13, 14, 15], lowerMiddle: [8, 9, 10, 11], bottom: [1, 2, 3, 4, 5, 6, 7] }
-        };
-        const layout = layouts[floor];
-        if (!layout) return;
-        Object.keys(layout).forEach(section => {
-            const container = document.getElementById(`floor${floor}-${section.replace('lowerMiddle', 'lower-middle')}-row`);
-            if (!container) return;
-            container.innerHTML = '';
-            const sectionRooms = rooms.filter(room => layout[section].includes(parseInt((room['No Kamar'] || '0').slice(2), 10)));
-            sectionRooms.forEach(room => container.appendChild(this.createRoomElement(room)));
-        });
-        this.updateFloorStats(floor, rooms);
+        if (floor === '3') {
+            const rooms = this.floorRooms['3'] || [];
+            const roomIds = [
+                'C319', 'C320', 'C321', 'C322', 'C323', 'C325', 'D318', 'D317',
+                'D316', 'D315', 'B309', 'B310', 'B311', 'B312', 'D308', 'D307',
+                'D306', 'D301', 'D302', 'D303', 'D305'
+            ];
+            roomIds.forEach(id => {
+                const container = document.getElementById(`room-${id}`);
+                if (container) container.innerHTML = '';
+            });
+            rooms.forEach(room => {
+                const container = document.getElementById(`room-${room['No Kamar']}`);
+                if (container) container.appendChild(this.createRoomElement(room));
+            });
+            this.updateFloorStats('3', rooms);
+            return;
+        }
     }
     
     renderFloor5() {
