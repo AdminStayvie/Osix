@@ -1,4 +1,4 @@
-/* --- Tambahan untuk Layout Lantai 1 --- */
+/* --- Tambahan untuk Layout Lantai 1 (Perbaikan) --- */
 
 .floor1-layout-container {
     background-color: var(--color-surface);
@@ -13,7 +13,7 @@
     display: grid;
     min-width: 750px; /* Lebar minimum agar layout tidak rusak */
     grid-template-columns: repeat(5, 1fr) 80px; /* 5 kolom untuk kamar, 1 kolom untuk parkir samping */
-    grid-template-rows: repeat(7, auto) 60px; /* 7 baris untuk kamar/koridor, 1 baris untuk parkir bawah */
+    grid-template-rows: repeat(8, auto); /* 8 baris untuk semua elemen */
     gap: var(--space-12);
     /* Mendefinisikan area untuk setiap elemen */
     grid-template-areas:
@@ -24,8 +24,7 @@
         "cor2 cor2 cor2 cor2 cor2 p-side"
         "b109 b108 b107 b106 stai p-side"
         "b101 b102 b103 b105 fill2 p-side"
-        "tera tera tera tera tera m-lift"
-        "p-bot p-bot p-bot p-bot p-bot m-lift";
+        "tera tera tera tera tera m-lift";
 }
 
 /* Penempatan setiap elemen ke dalam area grid */
@@ -58,7 +57,6 @@
 #floor1-grid .grid-filler:nth-of-type(2) { grid-area: fill2; }
 #floor1-grid .terrace { grid-area: tera; }
 #floor1-grid .parking-side { grid-area: p-side; }
-#floor1-grid .parking-bottom { grid-area: p-bot; }
 #floor1-grid .motor-lift { grid-area: m-lift; }
 
 
@@ -91,14 +89,11 @@
 }
 
 .grid-common-area.corridor { min-height: 40px; }
-.grid-common-area.terrace { grid-area: tera; min-height: 40px; }
+.grid-common-area.terrace { min-height: 40px; }
 .grid-common-area.parking-side {
     writing-mode: vertical-rl;
     text-orientation: mixed;
     padding: var(--space-12);
-}
-.grid-common-area.parking-bottom {
-    display: none; /* Sudah digabungkan dengan teras untuk simplifikasi */
 }
 .grid-common-area.motor-lift { background-color: var(--color-bg-5); }
 .grid-filler { background: none; border: none; min-height: 0; }
