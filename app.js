@@ -2,10 +2,7 @@
 
 class KostFloorPlanDashboard {
     constructor() {
-        // URL Web App dari Google Apps Script Anda.
-        // Ganti dengan URL yang Anda dapatkan setelah mendeploy skrip Google.
         this.scriptUrl = 'https://script.google.com/macros/s/AKfycbw5Eq284lYu9LDWPjHLlEFTC-8Mq2iTKGLvRPbi-XYGZBGPFQ9dIG3fUdm1iMlxign7/exec';
-        
         this.roomData = [];
         this.filteredRooms = [];
         this.currentFloor = '1';
@@ -14,66 +11,37 @@ class KostFloorPlanDashboard {
 
     async init() {
         this.setupEventListeners();
-        await this.loadRoomData(); // Memuat data saat inisialisasi
+        await this.loadRoomData();
     }
 
     async loadRoomData() {
         this.showLoadingState();
-        
         try {
-            // Mengambil data dari Google Apps Script
             const response = await fetch(this.scriptUrl);
-            
-            if (!response.ok) {
-                // Jika response dari server tidak OK (misal: error 500)
-                const errorText = await response.text();
-                throw new Error(`Gagal mengambil data dari server: ${response.status} ${response.statusText}. Pesan: ${errorText}`);
-            }
-            
+            if (!response.ok) throw new Error(`Server error: ${response.status}`);
             const data = await response.json();
+            if (data.error) throw new Error(data.message);
+            if (!Array.isArray(data)) throw new Error("Invalid data format.");
 
-            // Cek jika skrip Google mengembalikan pesan error yang sudah diformat
-            if (data.error) {
-                throw new Error(`Error dari Google Script: ${data.message}`);
-            }
-            
-            // Memastikan data yang diterima adalah array
-            if (!Array.isArray(data)) {
-                throw new Error("Format data yang diterima dari server tidak valid. Seharusnya berupa array.");
-            }
-
-            // Data dari Google Sheet berhasil didapatkan
             this.roomData = data;
-            this.filteredRooms = [...this.roomData];
-            
-            // Setelah data dimuat, lakukan pemrosesan dan render
-            this.organizeRoomsByFloor();
-            this.updateStats();
-            this.renderAllFloors(); // Render semua lantai sekali
-            this.switchFloor(this.currentFloor); // Tampilkan lantai yang aktif
+            this.applyFilters(); // Apply initial filters (or no filters)
             this.updateLastUpdated();
             this.hideLoadingState();
-            
         } catch (error) {
-            console.error('Terjadi kesalahan saat memuat data kamar:', error);
+            console.error('Error loading room data:', error);
             this.showErrorState(error.message);
         }
     }
 
     organizeRoomsByFloor() {
-        // Mengelompokkan kamar berdasarkan lantainya
         const floorRooms = { '1': [], '2': [], '3': [], '5': [] };
-
-        this.filteredRooms.forEach(room => { // Menggunakan filteredRooms agar filter berfungsi
+        this.filteredRooms.forEach(room => {
             const roomNumber = room['No Kamar'] || '';
-            const floor = roomNumber.charAt(1); // Mengambil karakter kedua sebagai nomor lantai
-            
+            const floor = roomNumber.charAt(1);
             if (floorRooms[floor]) {
                 floorRooms[floor].push(room);
             }
         });
-
-        // Mengurutkan kamar di setiap lantai
         Object.keys(floorRooms).forEach(floor => {
             floorRooms[floor].sort((a, b) => {
                 const aNum = parseInt((a['No Kamar'] || '0').slice(2), 10);
@@ -81,49 +49,32 @@ class KostFloorPlanDashboard {
                 return aNum - bNum;
             });
         });
-        
         this.floorRooms = floorRooms;
     }
 
     setupEventListeners() {
-        // Event listener untuk navigasi lantai
         document.querySelector('.floor-nav').addEventListener('click', (e) => {
-            if (e.target.classList.contains('floor-tab')) {
-                this.switchFloor(e.target.dataset.floor);
-            }
+            if (e.target.classList.contains('floor-tab')) this.switchFloor(e.target.dataset.floor);
         });
-
-        // Event listener untuk filter
-        document.getElementById('searchInput').addEventListener('input', () => this.applyFilters());
-        document.getElementById('roomTypeFilter').addEventListener('change', () => this.applyFilters());
-        document.getElementById('statusFilter').addEventListener('change', () => this.applyFilters());
-
-        // Event listener untuk modal
+        ['searchInput', 'roomTypeFilter', 'statusFilter'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => this.applyFilters());
+        });
         const modal = document.getElementById('roomModal');
         modal.addEventListener('click', (e) => {
-            if (e.target.id === 'modalClose' || e.target.id === 'modalCloseBtn' || e.target.classList.contains('modal-overlay')) {
-                this.closeModal();
-            }
+            if (e.target.matches('.modal-overlay, .modal-close, .btn--secondary')) this.closeModal();
         });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                this.closeModal();
-            }
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) this.closeModal();
         });
-
-        // Event listener untuk tombol refresh dan retry
         document.getElementById('refreshBtn').addEventListener('click', () => this.refreshData());
         document.getElementById('retryBtn').addEventListener('click', () => this.loadRoomData());
-        
-        // Event delegation untuk klik pada kartu kamar
         document.getElementById('floorPlansContainer').addEventListener('click', (e) => {
             const roomCard = e.target.closest('.room-card');
             if (roomCard) {
                 try {
-                    const roomData = JSON.parse(roomCard.dataset.room);
-                    this.showRoomModal(roomData);
-                } catch (error) {
-                    console.error('Gagal mem-parsing data kamar dari elemen:', error);
+                    this.showRoomModal(JSON.parse(roomCard.dataset.room));
+                } catch (err) {
+                    console.error('Failed to parse room data', err);
                 }
             }
         });
@@ -133,21 +84,16 @@ class KostFloorPlanDashboard {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
         const roomType = document.getElementById('roomTypeFilter').value;
         const status = document.getElementById('statusFilter').value;
-
         this.filteredRooms = this.roomData.filter(room => {
             const isAvailable = (room['Penghuni'] || '-').trim() === '-';
-            const matchesSearch = !searchTerm ||
-                (room['No Kamar'] || '').toLowerCase().includes(searchTerm) ||
-                (room['Penghuni'] || '').toLowerCase().includes(searchTerm);
+            const matchesSearch = !searchTerm || (room['No Kamar'] || '').toLowerCase().includes(searchTerm) || (room['Penghuni'] || '').toLowerCase().includes(searchTerm);
             const matchesType = !roomType || (room['Tiper Kamar'] || '') === roomType;
             const matchesStatus = !status || (status === 'available' && isAvailable) || (status === 'waiting' && !isAvailable);
-            
             return matchesSearch && matchesType && matchesStatus;
         });
-
-        this.organizeRoomsByFloor(); // Re-organize filtered rooms
-        this.renderAllFloors(); // Re-render all floors with filtered data
-        this.updateStats(); // Update stats global berdasarkan data asli
+        this.organizeRoomsByFloor();
+        this.renderAllFloors();
+        this.updateStats();
     }
 
     renderAllFloors() {
@@ -159,66 +105,64 @@ class KostFloorPlanDashboard {
 
     switchFloor(floor) {
         this.currentFloor = floor;
-
         document.querySelectorAll('.floor-tab').forEach(tab => tab.classList.remove('active'));
         document.querySelector(`.floor-tab[data-floor="${floor}"]`).classList.add('active');
-
         document.querySelectorAll('.floor-plan').forEach(plan => plan.classList.remove('active'));
         document.querySelector(`.floor-plan[data-floor="${floor}"]`).classList.add('active');
     }
 
     renderRegularFloor(floor) {
-        // --- LOGIKA BARU UNTUK LANTAI 1 ---
         if (floor === '1') {
             const rooms = this.floorRooms['1'] || [];
-
-            // Daftar semua ID kontainer kamar di Lantai 1 untuk dibersihkan
-            const roomContainersOnFloor1 = [
-                'C120', 'C121', 'C122', 'C123', 'C125',
-                'B119', 'B118', 'B117', 'B116',
-                'A110', 'A111', 'A112', 'A115',
-                'B109', 'B108', 'B107', 'B106',
+            const roomIds = [
+                'C120', 'C121', 'C122', 'C123', 'C125', 'B119', 'B118', 'B117', 'B116',
+                'A110', 'A111', 'A112', 'A115', 'B109', 'B108', 'B107', 'B106',
                 'B101', 'B102', 'B103', 'B105'
             ];
-            
-            // Bersihkan semua kontainer sebelum menempatkan kartu kamar baru
-            roomContainersOnFloor1.forEach(roomNum => {
-                const container = document.getElementById(`room-${roomNum}`);
+            roomIds.forEach(id => {
+                const container = document.getElementById(`room-${id}`);
                 if (container) container.innerHTML = '';
             });
-
-            // Tempatkan setiap kartu kamar ke dalam kontainer yang sesuai
             rooms.forEach(room => {
-                const roomNumber = room['No Kamar'];
-                const container = document.getElementById(`room-${roomNumber}`);
-                if (container) {
-                    const roomElement = this.createRoomElement(room);
-                    container.appendChild(roomElement);
-                }
+                const container = document.getElementById(`room-${room['No Kamar']}`);
+                if (container) container.appendChild(this.createRoomElement(room));
             });
             this.updateFloorStats('1', rooms);
-            return; // Selesai untuk Lantai 1
+            return;
+        }
+        
+        if (floor === '2') {
+            const rooms = this.floorRooms['2'] || [];
+            const roomIds = [
+                'C222', 'C223', 'C225', 'C226', 'C227', 'C228', 'B221', 'B220', 'B219',
+                'B218', 'B217', 'A210', 'A211', 'A212', 'A215', 'B216', 'B209',
+                'B208', 'B207', 'B206', 'B201', 'B202', 'B203', 'B205'
+            ];
+            roomIds.forEach(id => {
+                const container = document.getElementById(`room-${id}`);
+                if (container) container.innerHTML = '';
+            });
+            rooms.forEach(room => {
+                const container = document.getElementById(`room-${room['No Kamar']}`);
+                if (container) container.appendChild(this.createRoomElement(room));
+            });
+            this.updateFloorStats('2', rooms);
+            return;
         }
 
-        // --- LOGIKA LAMA UNTUK LANTAI 2 & 3 (TETAP SAMA) ---
-        const rooms = this.floorRooms[floor];
+        // Fallback for other floors (e.g., Floor 3)
+        const rooms = this.floorRooms[floor] || [];
         const layouts = {
-            '2': { top: [18, 19, 20, 21, 22, 23, 24], middle: [14, 15, 16, 17], lowerMiddle: [9, 10, 11, 12, 13], bottom: [1, 2, 3, 4, 5, 6, 7, 8] },
             '3': { top: [16, 17, 18, 19, 20, 21], middle: [12, 13, 14, 15], lowerMiddle: [8, 9, 10, 11], bottom: [1, 2, 3, 4, 5, 6, 7] }
         };
         const layout = layouts[floor];
         if (!layout) return;
-
         Object.keys(layout).forEach(section => {
-            const containerId = `floor${floor}-${section.replace('lowerMiddle', 'lower-middle')}-row`;
-            const container = document.getElementById(containerId);
+            const container = document.getElementById(`floor${floor}-${section.replace('lowerMiddle', 'lower-middle')}-row`);
             if (!container) return;
-            
-            container.innerHTML = ''; // Clear previous content
-            const roomNumbersInSection = layout[section];
-            const roomsInSection = rooms.filter(room => roomNumbersInSection.includes(parseInt((room['No Kamar'] || '0').slice(2), 10)));
-            
-            roomsInSection.forEach(room => container.appendChild(this.createRoomElement(room)));
+            container.innerHTML = '';
+            const sectionRooms = rooms.filter(room => layout[section].includes(parseInt((room['No Kamar'] || '0').slice(2), 10)));
+            sectionRooms.forEach(room => container.appendChild(this.createRoomElement(room)));
         });
         this.updateFloorStats(floor, rooms);
     }
@@ -227,18 +171,13 @@ class KostFloorPlanDashboard {
         const rooms = this.floorRooms['5'] || [];
         const leftWing = document.getElementById('floor5-left-wing');
         const rightWing = document.getElementById('floor5-right-wing');
-        
         if (leftWing) leftWing.innerHTML = '';
         if (rightWing) rightWing.innerHTML = '';
-
         rooms.forEach(room => {
             const roomNum = parseInt((room['No Kamar'] || '0').slice(2), 10);
             const element = this.createRoomElement(room);
-            if (roomNum <= 10) {
-                leftWing.appendChild(element);
-            } else {
-                rightWing.appendChild(element);
-            }
+            if (roomNum <= 10) leftWing.appendChild(element);
+            else rightWing.appendChild(element);
         });
         this.updateFloorStats('5', rooms);
     }
@@ -247,35 +186,25 @@ class KostFloorPlanDashboard {
         const isAvailable = (room['Penghuni'] || '-').trim() === '-';
         const statusClass = isAvailable ? 'available' : 'waiting';
         const statusText = isAvailable ? 'Tersedia' : 'Waiting List';
-
         const roomDiv = document.createElement('div');
         roomDiv.className = `room-card ${statusClass}`;
         roomDiv.dataset.room = JSON.stringify(room);
-        
-        // Kartu kamar mengisi penuh kontainer grid-nya
         roomDiv.style.width = '100%';
         roomDiv.style.height = '100%';
-        
-        roomDiv.innerHTML = `
-            <div class="room-number">${room['No Kamar'] || 'N/A'}</div>
-            <div class="room-type">${room['Tiper Kamar'] || 'N/A'}</div>
-            <div class="room-status ${statusClass}">${statusText}</div>
-        `;
+        roomDiv.innerHTML = `<div class="room-number">${room['No Kamar'] || 'N/A'}</div><div class="room-type">${room['Tiper Kamar'] || 'N/A'}</div><div class="room-status ${statusClass}">${statusText}</div>`;
         return roomDiv;
     }
     
     updateStats() {
-        const totalRooms = this.roomData.length;
-        const availableRooms = this.roomData.filter(r => (r['Penghuni'] || '-').trim() === '-').length;
-        document.getElementById('totalRooms').textContent = totalRooms;
-        document.getElementById('availableRooms').textContent = availableRooms;
-        document.getElementById('waitingRooms').textContent = totalRooms - availableRooms;
+        document.getElementById('totalRooms').textContent = this.roomData.length;
+        const availableCount = this.roomData.filter(r => (r['Penghuni'] || '-').trim() === '-').length;
+        document.getElementById('availableRooms').textContent = availableCount;
+        document.getElementById('waitingRooms').textContent = this.roomData.length - availableCount;
     }
 
     updateFloorStats(floor, rooms) {
-        const availableCount = rooms.filter(r => (r['Penghuni'] || '-').trim() === '-').length;
         document.getElementById(`floor${floor}Total`).textContent = rooms.length;
-        document.getElementById(`floor${floor}Available`).textContent = availableCount;
+        document.getElementById(`floor${floor}Available`).textContent = rooms.filter(r => (r['Penghuni'] || '-').trim() === '-').length;
     }
     
     showRoomModal(room) {
@@ -287,10 +216,9 @@ class KostFloorPlanDashboard {
         statusEl.textContent = isAvailable ? 'Tersedia' : 'Waiting List';
         statusEl.className = `status ${isAvailable ? 'status--success' : 'status--warning'}`;
         document.getElementById('modalOccupant').textContent = isAvailable ? 'Tidak ada' : room['Penghuni'];
-        document.getElementById('modalDP').textContent = room['DP'] == 'TRUE' ? 'Sudah Bayar' : 'Belum';
+        document.getElementById('modalDP').textContent = String(room['DP']).toUpperCase() === 'TRUE' ? 'Sudah Bayar' : 'Belum';
         document.getElementById('modalDPDate').textContent = room['Tanggal DP'] || '-';
-        document.getElementById('modalPayment').textContent = room['Pelunasan'] == 'TRUE' ? 'Lunas' : 'Belum';
-
+        document.getElementById('modalPayment').textContent = String(room['Pelunasan']).toUpperCase() === 'TRUE' ? 'Lunas' : 'Belum';
         document.getElementById('roomModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
@@ -301,11 +229,7 @@ class KostFloorPlanDashboard {
     }
 
     updateLastUpdated() {
-        const now = new Date();
-        document.getElementById('lastUpdated').textContent = now.toLocaleString('id-ID', {
-            dateStyle: 'long',
-            timeStyle: 'short'
-        });
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
     }
 
     showLoadingState() {
@@ -323,7 +247,7 @@ class KostFloorPlanDashboard {
         document.getElementById('loadingState').classList.add('hidden');
         const errorState = document.getElementById('errorState');
         errorState.classList.remove('hidden');
-        errorState.querySelector('p').textContent = message || 'Terjadi kesalahan saat memuat data. Silakan coba lagi.';
+        errorState.querySelector('p').textContent = message || 'Terjadi kesalahan saat memuat data.';
         document.getElementById('floorPlansContainer').style.display = 'none';
     }
 
@@ -337,7 +261,6 @@ class KostFloorPlanDashboard {
     }
 }
 
-// Inisialisasi dasbor saat DOM sudah siap
 document.addEventListener('DOMContentLoaded', () => {
     window.kostDashboard = new KostFloorPlanDashboard();
 });
