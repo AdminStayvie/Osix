@@ -1,4 +1,92 @@
-            <!-- Floor 1 -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Ketersediaan Kamar Kost - Bhaskara Osix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>Dashboard Bhaskara Osix</h1>
+                <p class="header-subtitle">Sistem Manajemen Ketersediaan Kamar Kost</p>
+                <div class="last-updated">
+                    <span>Terakhir diperbarui: <span id="lastUpdated">-</span></span>
+                    <button id="refreshBtn" class="btn btn--secondary btn--sm">🔄 Refresh</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Summary Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="totalRooms">0</div>
+                <div class="stat-label">Total Kamar</div>
+            </div>
+            <div class="stat-card available">
+                <div class="stat-number" id="availableRooms">0</div>
+                <div class="stat-label">Tersedia</div>
+            </div>
+            <div class="stat-card waiting">
+                <div class="stat-number" id="waitingRooms">0</div>
+                <div class="stat-label">Waiting List</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="form-control" placeholder="Cari nomor kamar atau penghuni...">
+            </div>
+            <div class="filter-container">
+                <select id="roomTypeFilter" class="form-control">
+                    <option value="">Semua Tipe Kamar</option>
+                    <option value="Compact">Compact</option>
+                    <option value="Serenity">Serenity</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Luxury">Luxury</option>
+                </select>
+                <select id="statusFilter" class="form-control">
+                    <option value="">Semua Status</option>
+                    <option value="available">Tersedia</option>
+                    <option value="waiting">Waiting List</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h3>Keterangan Status Kamar</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="legend-color available"></span>
+                    <span>Tersedia</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color waiting"></span>
+                    <span>Waiting List</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color common-area"></span>
+                    <span>Area Umum</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floor Navigation -->
+        <div class="floor-nav">
+            <button class="floor-tab active" data-floor="1">Lantai 1</button>
+            <button class="floor-tab" data-floor="2">Lantai 2</button>
+            <button class="floor-tab" data-floor="3">Lantai 3</button>
+            <button class="floor-tab" data-floor="5">Lantai 5</button>
+        </div>
+
+        <!-- Floor Plans Container -->
+        <div id="floorPlansContainer" class="floor-plans-container">
+            <!-- Floor 1 (Layout Baru) -->
             <div class="floor-plan active" data-floor="1">
                 <div class="floor-header">
                     <h2>Lantai 1</h2>
@@ -59,3 +147,170 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Floor 2 (Layout Lama) -->
+            <div class="floor-plan" data-floor="2">
+                <div class="floor-header">
+                    <h2>Lantai 2</h2>
+                    <div class="floor-stats">
+                        <span class="floor-stat">Total: <span id="floor2Total">0</span></span>
+                        <span class="floor-stat available">Tersedia: <span id="floor2Available">0</span></span>
+                    </div>
+                </div>
+                <div class="floor-layout">
+                    <!-- Top Section: Rooms 18-24 -->
+                    <div class="room-section top-section">
+                        <div class="rooms-row" id="floor2-top-row"></div>
+                    </div>
+                    
+                    <!-- Middle Section: Rooms 14-17 -->
+                    <div class="room-section middle-section">
+                        <div class="rooms-row" id="floor2-middle-row"></div>
+                    </div>
+                    
+                    <!-- Common Areas -->
+                    <div class="common-areas">
+                        <div class="common-area">Lubang</div>
+                        <div class="common-area">Tangga</div>
+                    </div>
+                    
+                    <!-- Lower Middle Section: Rooms 09-13 -->
+                    <div class="room-section lower-middle-section">
+                        <div class="rooms-row" id="floor2-lower-middle-row"></div>
+                    </div>
+                    
+                    <!-- Bottom Section: Rooms 01-08 -->
+                    <div class="room-section bottom-section">
+                        <div class="rooms-row" id="floor2-bottom-row"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floor 3 (Layout Lama) -->
+            <div class="floor-plan" data-floor="3">
+                <div class="floor-header">
+                    <h2>Lantai 3</h2>
+                    <div class="floor-stats">
+                        <span class="floor-stat">Total: <span id="floor3Total">0</span></span>
+                        <span class="floor-stat available">Tersedia: <span id="floor3Available">0</span></span>
+                    </div>
+                </div>
+                <div class="floor-layout">
+                    <!-- Top Section: Rooms 16-21 -->
+                    <div class="room-section top-section">
+                        <div class="rooms-row" id="floor3-top-row"></div>
+                    </div>
+                    
+                    <!-- Middle Section: Rooms 12-15 -->
+                    <div class="room-section middle-section">
+                        <div class="rooms-row" id="floor3-middle-row"></div>
+                    </div>
+                    
+                    <!-- Common Areas -->
+                    <div class="common-areas">
+                        <div class="common-area">Tangga</div>
+                    </div>
+                    
+                    <!-- Lower Middle Section: Rooms 08-11 -->
+                    <div class="room-section lower-middle-section">
+                        <div class="rooms-row" id="floor3-lower-middle-row"></div>
+                    </div>
+                    
+                    <!-- Bottom Section: Rooms 01-07 -->
+                    <div class="room-section bottom-section">
+                        <div class="rooms-row" id="floor3-bottom-row"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floor 5 (Layout Lama) -->
+            <div class="floor-plan" data-floor="5">
+                <div class="floor-header">
+                    <h2>Lantai 5</h2>
+                    <div class="floor-stats">
+                        <span class="floor-stat">Total: <span id="floor5Total">0</span></span>
+                        <span class="floor-stat available">Tersedia: <span id="floor5Available">0</span></span>
+                    </div>
+                </div>
+                <div class="floor-layout floor5-layout">
+                    <!-- Left Wing -->
+                    <div class="room-wing left-wing" id="floor5-left-wing"></div>
+                    
+                    <!-- Central Areas -->
+                    <div class="central-areas">
+                        <div class="common-area large">Jemuran/Laundry</div>
+                        <div class="common-area large">T.Serbaguna</div>
+                        <div class="common-area">Gudang</div>
+                        <div class="common-area">Ruang Makan Bersama</div>
+                    </div>
+                    
+                    <!-- Right Wing -->
+                    <div class="room-wing right-wing" id="floor5-right-wing"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state hidden">
+            <div class="loading-spinner"></div>
+            <p>Memuat data kamar...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state hidden">
+            <div class="error-icon">⚠️</div>
+            <h3>Gagal Memuat Data</h3>
+            <p>Terjadi kesalahan saat memuat data kamar. Silakan coba lagi.</p>
+            <button id="retryBtn" class="btn btn--primary">Coba Lagi</button>
+        </div>
+    </div>
+
+    <!-- Modal untuk Detail Kamar -->
+    <div id="roomModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detail Kamar</h2>
+                <button id="modalClose" class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="room-detail-grid">
+                    <div class="detail-item">
+                        <label>Nomor Kamar:</label>
+                        <span id="modalRoomNumber">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Tipe Kamar:</label>
+                        <span id="modalRoomType">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Status:</label>
+                        <span id="modalStatus" class="status">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Penghuni:</label>
+                        <span id="modalOccupant">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Status DP:</label>
+                        <span id="modalDP">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Tanggal DP:</label>
+                        <span id="modalDPDate">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Status Pelunasan:</label>
+                        <span id="modalPayment">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalCloseBtn" class="btn btn--secondary">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
