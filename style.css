@@ -1518,18 +1518,18 @@ select.form-control {
 #floor3-grid {
     display: grid;
     min-width: 900px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 80px;
+    grid-template-columns: repeat(6, 1fr) 80px;
     gap: var(--space-12);
     grid-template-areas:
         "c319 c320 c321 c322 c323 c325 f3pk-r"
         "f3c1 f3c1 f3c1 f3c1 f3c1 f3c1 f3pk-r"
-        "d318 d317 . d316 d315 . f3pk-r"
+        "d318 d317 d316 d315 .    .    f3pk-r"
         "f3c2 f3c2 f3c2 f3c2 f3c2 f3c2 f3pk-r"
-        "b309 b310 b311 . b312 . f3pk-r"
+        "b309 b310 b311 .    b312 .    f3pk-r"
         "f3c3 f3c3 f3c3 f3c3 f3c3 f3c3 f3pk-r"
-        "d308 d307 . d306 f3tg f3tg f3pk-r"
+        "d308 d307 d306 .    f3tg f3tg f3pk-r"
         "f3c4 f3c4 f3c4 f3c4 f3dp f3dp f3pk-r"
-        "d301 d302 . d303 d305 . f3pk-r"
+        "d301 d302 d303 d305 .    .    f3pk-r"
         "f3li f3pk-b f3pk-b f3pk-b f3pk-b f3pk-b f3pk-r";
 }
 
