@@ -87,7 +87,7 @@
         <!-- Floor Plans Container -->
         <div id="floorPlansContainer" class="floor-plans-container">
             
-            <!-- Floor 1 (Layout Diperbaiki) -->
+            <!-- Floor 1 -->
             <div class="floor-plan active" data-floor="1">
                 <div class="floor-header">
                     <h2>Lantai 1</h2>
@@ -98,30 +98,11 @@
                 </div>
                 <div class="floor1-layout-container">
                     <div id="floor1-grid">
-                        <!-- Kamar (akan diisi oleh JavaScript) -->
-                        <div id="room-C120" class="grid-room"></div>
-                        <div id="room-C121" class="grid-room"></div>
-                        <div id="room-C122" class="grid-room"></div>
-                        <div id="room-C123" class="grid-room"></div>
-                        <div id="room-C125" class="grid-room"></div>
-                        <div id="room-B119" class="grid-room"></div>
-                        <div id="room-B118" class="grid-room"></div>
-                        <div id="room-B117" class="grid-room"></div>
-                        <div id="room-B116" class="grid-room"></div>
-                        <div id="room-A110" class="grid-room"></div>
-                        <div id="room-A111" class="grid-room"></div>
-                        <div id="room-A112" class="grid-room"></div>
-                        <div id="room-A115" class="grid-room"></div>
-                        <div id="room-B109" class="grid-room"></div>
-                        <div id="room-B108" class="grid-room"></div>
-                        <div id="room-B107" class="grid-room"></div>
-                        <div id="room-B106" class="grid-room"></div>
-                        <div id="room-B101" class="grid-room"></div>
-                        <div id="room-B102" class="grid-room"></div>
-                        <div id="room-B103" class="grid-room"></div>
-                        <div id="room-B105" class="grid-room"></div>
-                        
-                        <!-- Area Umum -->
+                        <div id="room-C120" class="grid-room"></div><div id="room-C121" class="grid-room"></div><div id="room-C122" class="grid-room"></div><div id="room-C123" class="grid-room"></div><div id="room-C125" class="grid-room"></div>
+                        <div id="room-B119" class="grid-room"></div><div id="room-B118" class="grid-room"></div><div id="room-B117" class="grid-room"></div><div id="room-B116" class="grid-room"></div>
+                        <div id="room-A110" class="grid-room"></div><div id="room-A111" class="grid-room"></div><div id="room-A112" class="grid-room"></div><div id="room-A115" class="grid-room"></div>
+                        <div id="room-B109" class="grid-room"></div><div id="room-B108" class="grid-room"></div><div id="room-B107" class="grid-room"></div><div id="room-B106" class="grid-room"></div>
+                        <div id="room-B101" class="grid-room"></div><div id="room-B102" class="grid-room"></div><div id="room-B103" class="grid-room"></div><div id="room-B105" class="grid-room"></div>
                         <div id="corridor-1" class="grid-common-area corridor">KORIDOR</div>
                         <div class="grid-common-area kitchen">Dapur</div>
                         <div id="corridor-2" class="grid-common-area corridor">KORIDOR</div>
@@ -133,7 +114,7 @@
                 </div>
             </div>
 
-            <!-- Floor 2 (Layout Lama) -->
+            <!-- Floor 2 (Layout Baru) -->
             <div class="floor-plan" data-floor="2">
                 <div class="floor-header">
                     <h2>Lantai 2</h2>
@@ -142,19 +123,28 @@
                         <span class="floor-stat available">Tersedia: <span id="floor2Available">0</span></span>
                     </div>
                 </div>
-                <div class="floor-layout">
-                    <div class="room-section top-section"><div class="rooms-row" id="floor2-top-row"></div></div>
-                    <div class="room-section middle-section"><div class="rooms-row" id="floor2-middle-row"></div></div>
-                    <div class="common-areas">
-                        <div class="common-area">Lubang</div>
-                        <div class="common-area">Tangga</div>
+                <div class="floor2-layout-container">
+                    <div id="floor2-grid">
+                        <!-- Kamar (akan diisi oleh JavaScript) -->
+                        <div id="room-C222" class="grid-room"></div><div id="room-C223" class="grid-room"></div><div id="room-C225" class="grid-room"></div><div id="room-C226" class="grid-room"></div><div id="room-C227" class="grid-room"></div><div id="room-C228" class="grid-room"></div>
+                        <div id="room-B221" class="grid-room"></div><div id="room-B220" class="grid-room"></div><div id="room-B219" class="grid-room"></div><div id="room-B218" class="grid-room"></div><div id="room-B217" class="grid-room"></div>
+                        <div id="room-A210" class="grid-room"></div><div id="room-A211" class="grid-room"></div><div id="room-A212" class="grid-room"></div><div id="room-A215" class="grid-room"></div><div id="room-B216" class="grid-room"></div>
+                        <div id="room-B209" class="grid-room"></div><div id="room-B208" class="grid-room"></div><div id="room-B207" class="grid-room"></div><div id="room-B206" class="grid-room"></div>
+                        <div id="room-B201" class="grid-room"></div><div id="room-B202" class="grid-room"></div><div id="room-B203" class="grid-room"></div><div id="room-B205" class="grid-room"></div>
+
+                        <!-- Area Umum -->
+                        <div id="f2-corridor-1" class="grid-common-area corridor">KORIDOR</div>
+                        <div id="f2-corridor-2" class="grid-common-area corridor">KORIDOR</div>
+                        <div class="grid-common-area f2-tangga">Tangga</div>
+                        <div class="grid-common-area f2-dapur">Dapur</div>
+                        <div class="grid-common-area f2-parkir-atas">AREA PARKIR</div>
+                        <div class="grid-common-area f2-parkir-bawah">AREA PARKIR</div>
+                        <div class="grid-common-area f2-lift">LIFT MOTOR</div>
                     </div>
-                    <div class="room-section lower-middle-section"><div class="rooms-row" id="floor2-lower-middle-row"></div></div>
-                    <div class="room-section bottom-section"><div class="rooms-row" id="floor2-bottom-row"></div></div>
                 </div>
             </div>
 
-            <!-- Floor 3 (Layout Lama) -->
+            <!-- Floor 3 -->
             <div class="floor-plan" data-floor="3">
                 <div class="floor-header">
                     <h2>Lantai 3</h2>
@@ -172,7 +162,7 @@
                 </div>
             </div>
 
-            <!-- Floor 5 (Layout Lama) -->
+            <!-- Floor 5 -->
             <div class="floor-plan" data-floor="5">
                 <div class="floor-header">
                     <h2>Lantai 5</h2>
